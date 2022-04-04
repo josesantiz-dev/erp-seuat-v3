@@ -130,7 +130,7 @@
             <i class="align-middle" data-feather="settings"></i>
           </a>
           <a class="nav-link dropdown-toggle d-none d-sm-inline-block mt-img-avatar" href="#" data-bs-toggle="dropdown">
-            <img src="<?php echo media(); ?>/images/img/user2-160x160.jpg" height="32" class="img-circle elevation-1" alt="Perfil" /> <span class="text-dark"><?php echo ($_SESSION['nom_user']['nombre_persona'].' '.$_SESSION['nom_user']['ap_paterno'].' '.$_SESSION['nom_user']['ap_materno']) ?></span>
+            <img src="<?php echo media(); ?>/images/img/user2-160x160.jpg" height="32" class="img-circle elevation-1" alt="Perfil" /> <span class="text-dark"><?php echo ($_SESSION['nomPersona']) ?></span>
           </a>
           <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
             <!-- <a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1" data-feather="user"></i> Perfil</a>
@@ -224,6 +224,19 @@
               </p>
             </a>
           </li>
+
+          <li class="nav-header"><h6>PRUEBA MULTI DB</h6></li>
+          <li class="nav-item">
+              <a href="<?php echo BASE_URL ?>/Gruposmulti" class="nav-link">
+                  <i class="ml-3 mr-2" data-feather="layout"></i>
+                  <!--<i class="nav-icon fas fa-university"></i>-->
+                  <p>
+                      Grupos multi db
+                  </p>
+              </a>
+          </li>
+
+
 
           <li class="nav-header"><h6>DIRC</h6></li>
           <li class="nav-item">

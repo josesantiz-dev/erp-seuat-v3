@@ -48,6 +48,14 @@
             </div>
           </div>
         </div>
+        <div class="input-group mb-3">
+            <select class="form-control custom-select" id="selectPlantel" name="selectPlantel" required>
+                <option value="" selected>Selecciona un plantel</option>
+                <?php foreach ($data['planteles'] as $key => $value) { ?>
+                    <option value="<?php echo($value['nombre_conexion'])?>"><?php echo($value['nombre_plantel']) ?></option>
+                <?php } ?>
+        </select></div>
+        <br><br><br>
         <div class="row">
           <div class="col-7">
             <div class="icheck-primary">

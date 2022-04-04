@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
             let strNickname = document.querySelector('#txtNickname').value;
             let strPassword = document.querySelector('#txtPassword').value;
-
-            if(strNickname == "" || strPassword == "")
+            let idPlantel = document.querySelector('#selectPlantel').value;
+            if(strNickname == "" || strPassword == "" || idPlantel == "")
             {
                 swal.fire("Por favor", "Escribe un usuario y contraseña.", "error");
                 return false;
@@ -24,13 +24,14 @@ document.addEventListener('DOMContentLoaded', function(){
                     if(request.readyState !=4) return;
                     if(request.status == 200){
                         var objData = JSON.parse(request.responseText);
-                        if(objData.estatus)
+                        console.log(objData)
+                        /* if(objData.estatus)
                         {
                             window.location = base_url+'/dashboard';
                         }else{
                             swal.fire("Atención", objData.msg, "error");
                             document.querySelector('#txtPassword').value = "";
-                        }
+                        } */
                     }else{
                         swal.fire("Atención","Error en el proceso", "error");
                     }
