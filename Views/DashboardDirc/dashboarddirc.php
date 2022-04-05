@@ -3,26 +3,19 @@
   getModal("DashboardDirc/modalRvoesExp",$data);
 
 ?>
-
 <div class="wrapper">
-  <!-- Navbar -->
-  <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1 class="m-0"><?php echo $data['page_tag']?></h1>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
+          </div>
+        </div>
+      </div>
     </div>
-    <!-- /.content-header -->
-    <!-- Main content -->
-    <div class="content">
+       <div class="content">
         <div class="container-fluid">
-
             <!-- CARDS DE TOTALES-->
             <div class="row">
                 <div class="col-12 mb-3">
@@ -33,7 +26,7 @@
                         <?php 
                         foreach ($data['planteles'] as $key => $value) {
                             ?>
-                                <option value="<?php echo $value['id'] ?>"><?php echo($value['nombre_plantel'].'('.$value['municipio'].')')?></option>
+                                <option value="<?php echo $value['nombre_conexion'] ?>"><?php echo($value['nombre_plantel'])?></option>
                             <?php
                         }
                         ?>
@@ -190,22 +183,10 @@
                     </div>        
                 </div>
             </div>
-        <!-- /.row -->
         </div>
-      <!-- /.container-fluid -->
     </div>
-    <!-- /.content -->
   </div>
-  <!-- /.content-wrapper -->
-
-
-
-  <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
   </aside>
-  <!-- /.control-sidebar -->
 </div>
-<!-- ./wrapper -->
-
 <?php footerAdmin($data); ?>

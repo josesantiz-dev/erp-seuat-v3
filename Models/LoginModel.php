@@ -21,7 +21,7 @@ class LoginModel extends Mysql
 		INNER JOIN t_roles AS r ON us.id_rol = r.id  
 		INNER JOIN t_db AS db ON us.id_db = db.id
 		WHERE us.nickname = '$this->strUsuario' AND us.password = '$this->strPassword' AND db.nombre_conexion = '$this->nomConexion' AND us.estatus != 0";
-		$request = $this->select($sql, 'bd_user');
+		$request = $this->select($sql, 'bd_usr');
 		return $request;
 	}
 	public function selectDateUser(int $idPersona,string $nomConexion){

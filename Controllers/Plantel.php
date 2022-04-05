@@ -1,15 +1,21 @@
 <?php
 
 	class Plantel extends Controllers{
+		private $idUser;
+		private $nomConexion;
+		private $rol;
 		public function __construct()
 		{
 			parent::__construct();
 			session_start();
-			if(empty($_SESSION['login']))
-			{
-				header('Location: '.base_url().'/login');
-				die();
-			}
+		    if(empty($_SESSION['login']))
+		    {
+			    header('Location: '.base_url().'/login');
+			    die();
+		    }
+			$this->idUser = $_SESSION['idUser'];
+			$this->nomConexion = $_SESSION['nomConexion'];
+			$this->rol = $_SESSION['claveRol'];
 		}
 
 		//Funcion para la Vista de Planteles
@@ -21,57 +27,80 @@
 			$data['page_name'] = "plantel";
 			$data['page_content'] = "";
 			$data['page_functions_js'] = "functions_planteles.js";
-			$data['lista_categorias'] = $this->model->selectCategorias(); //Traer lista de Categorias
-			$data['lista_estados'] = $this->model->selectEstados(); //Traer lista de Estados
+			$data['planteles'] = $this->model->selectSuperPlanteles('bd_usr');
+			$data['lista_categorias'] = $this->model->selectCategorias($this->nomConexion); //Traer lista de Categorias
+			$data['lista_estados'] = $this->model->selectEstados($this->nomConexion); //Traer lista de Estados
 			$this->views->getView($this,"plantel",$data);
 		}
 
 		//Funcion para traer Lista de Planteles
-		public function getPlanteles(){
-			$arrData = $this->model->selectPlanteles();
-			for ($i=0; $i < count($arrData); $i++) {
-				$arrData[$i]['numeracion'] = $i+1;
-				$arrData[$i]['options'] = '<div class="text-center">
+		public function getPlanteles(string $nomConexion){
+			$arrRes = [];
+			if($nomConexion == 'all'){
+				foreach (conexiones as $key => $conexion) {
+					if($key != 'bd_usr'){
+						$arrData = $this->model->selectPlanteles($key);
+						if(count($arrData) > 0 ){
+							for($i = 0; $i<count($arrData); $i++){
+								$arrData[$i]['nom_conexion'] = $key;
+							}
+							array_push($arrRes, $arrData);
+						}
+					}
+				}
+				$newArray = array_merge([], ...$arrRes);
+			}else{
+				$newArray = $this->model->selectPlanteles($nomConexion);
+				for($i = 0; $i<count($newArray); $i++){
+					$newArray[$i]['nom_conexion'] = $nomConexion;
+				}
+			}
+			for ($i=0; $i < count($newArray); $i++) {
+				$newArray[$i]['numeracion'] = $i+1;
+				$newArray[$i]['options'] = '<div class="text-center">
 				<div class="btn-group">
 					<button type="button" class="btn btn-outline-secondary btn-xs icono-color-principal dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 					<i class="fas fa-layer-group"></i> &nbsp; Acciones
 					</button>
 					<div class="dropdown-menu">
-						<button class="dropdown-item btn btn-outline-secondary btn-sm btn-flat icono-color-principal btnVerPlantel" onClick="fntVerPlantel('.$arrData[$i]['id'].')" data-toggle="modal" data-target="#ModalVerPlantel" title="Ver"> &nbsp;&nbsp; <i class="fas fa-eye icono-azul"></i> &nbsp; Ver</button>
-						<button class="dropdown-item btn btn-outline-secondary btn-sm btn-flat icono-color-principal btnEditPlantel" onClick="fntEditPlantel('.$arrData[$i]['id'].')" data-toggle="modal" data-target="#ModalFormEditPlantel" title="Editar"> &nbsp;&nbsp; <i class="fas fa-pencil-alt"></i> &nbsp; Editar</button>
+						<button class="dropdown-item btn btn-outline-secondary btn-sm btn-flat icono-color-principal btnVerPlantel" onClick="fntVerPlantel('.$newArray[$i]['id'].')" data-toggle="modal" data-target="#ModalVerPlantel" title="Ver"> &nbsp;&nbsp; <i class="fas fa-eye icono-azul"></i> &nbsp; Ver</button>
+						<button class="dropdown-item btn btn-outline-secondary btn-sm btn-flat icono-color-principal btnEditPlantel" con="'.$newArray[$i]['nom_conexion'].'" onClick="fntEditPlantel(this,'.$newArray[$i]['id'].')" data-toggle="modal" data-target="#ModalFormEditPlantel" title="Editar"> &nbsp;&nbsp; <i class="fas fa-pencil-alt"></i> &nbsp; Editar</button>
 						<div class="dropdown-divider"></div>
-						<button class="dropdown-item btn btn-outline-secondary btn-sm btn-flat icono-color-principal btnDelPlantel" onClick="fntDelPlantel('.$arrData[$i]['id'].')" title="Eliminar"> &nbsp;&nbsp; <i class="far fa-trash-alt "></i> &nbsp; Eliminar</button>
+						<button class="dropdown-item btn btn-outline-secondary btn-sm btn-flat icono-color-principal btnDelPlantel" onClick="fntDelPlantel('.$newArray[$i]['id'].')" title="Eliminar"> &nbsp;&nbsp; <i class="far fa-trash-alt "></i> &nbsp; Eliminar</button>
 						<!--<a class="dropdown-item" href="#">link</a>-->
 					</div>
 				</div>
 				</div>';
 			}
-			echo json_encode($arrData,JSON_UNESCAPED_UNICODE);
+			echo json_encode($newArray,JSON_UNESCAPED_UNICODE);
 			die();
 		}
 		
 		//Funcion para obtener Datos de un Plantel
-		public function getPlantel(int $idPlantel){
-			$arrData = $this->model->selectPlantel($idPlantel);
+		public function getPlantel($params){
+			$arrParams = explode(',',$params);
+			$idPlantel = $arrParams[0];
+			$nomConexion = $arrParams[1];
+			$arrData = $this->model->selectPlantel($idPlantel,$nomConexion);;
 			echo json_encode($arrData,JSON_UNESCAPED_UNICODE);
 			die();
 		}
 		//Funcion para traer Lista de Municipios
 		public function getMunicipios(){
 			$idEstado = $_GET['idestado'];
-			$arrData = $this->model->selectMunicipios($idEstado);
+			$arrData = $this->model->selectMunicipios($idEstado,$this->nomConexion);
 			echo json_encode($arrData,JSON_UNESCAPED_UNICODE);
 			die();
 		}
 		//Funcion para traer Lista de Localidades
 		public function getLocalidades(){
 			$idMunicipio = $_GET['idmunicipio'];
-			$arrData = $this->model->selectLocalidades($idMunicipio);
+			$arrData = $this->model->selectLocalidades($idMunicipio, $this->nomConexion);
 			echo json_encode($arrData,JSON_UNESCAPED_UNICODE);
 			die();
 		}
 		//Funcion para Guardar un Nuevo Plantel
-		public function setPlantel(){
+		public function setPlantel($nomConexion){
 			$data = $_POST;
             $files = $_FILES;
 			$idPlantelEdit = 0;
@@ -84,7 +113,7 @@
 			}
 			
 			if($idPlantelEdit != 0 ){
-				$arrData = $this->model->updatePlantel($idPlantelEdit,$data,$files);
+				$arrData = $this->model->updatePlantel($idPlantelEdit,$data,$files,$nomConexion);
 				if($arrData['estatus'] != TRUE){
 					$arrResponse = array('estatus' => true, 'msg' => 'Datos actualizados correctamente.');
 				}else{
@@ -92,7 +121,7 @@
 				}
 			}
 			if($idPlantelNuevo == 1){
-				$arrData = $this->model->insertPlantel($data,$files);
+				$arrData = $this->model->insertPlantel($data,$files,$nomConexion);
 			    if($arrData['estatus'] != TRUE){
 			        $arrResponse = array('estatus' => true, 'msg' => 'Datos guardados correctamente.');
 			    }else{
@@ -150,7 +179,7 @@
 		}
 
 		public function getListEstados(){
-			$arrResponse = $this->model->selectEstados();
+			$arrResponse = $this->model->selectEstados($this->nomConexion);
 			echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
 			die();
 		}

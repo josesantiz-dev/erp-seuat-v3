@@ -23,7 +23,7 @@
 			$resInsert = $insert->execute($this->arrValues);
 			if ($resInsert)
 			{
-				$lastInsert = $this->$basedatos->lastInsertId();
+				$lastInsert = $this->conexion[$bd]->lastInsertId();
 			}else{
 				$lastInsert = 0;
 			}

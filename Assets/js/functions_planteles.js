@@ -5,23 +5,75 @@ document.getElementById("btnSiguiente").style.display = "none";
 document.getElementById("btnSiguienteEdit").style.display = "none";
 document.getElementById("btnActionFormNuevo").style.display = "none";
 document.getElementById("btnActionFormEdit").style.display = "none";
+document.getElementById('btnNuevo_plantel').style.display = "none";
 var tabActual = 0;
 var tabActualEdit = 0;
 mostrarTab(tabActual);
 mostrarTabEdit(tabActualEdit);
 var tablePlanEstudios;
-
+let conexionSeleccionada;
 
 //Mostrar Lista de Planteles de Datatable
 document.addEventListener('DOMContentLoaded', function(){
-	tablePlantel = $('#tablePlantel').dataTable( {
+    mostrarPlantelesDatatable('all');
+    //Funcion para Guardar Nuevo Plantel
+    var formPlantel = document.querySelector("#formNuevoPlantel");
+    formPlantel.onsubmit = function(e){
+        e.preventDefault();
+        document.querySelector("#idPlantelNuevo").value = 1;
+        var strNombrePlantel = document.querySelector('#txtNombrePlantelNuevo').value;
+        var strAbreviacionPlantel = document.querySelector('#txtAbreviacionPlantelNuevo').value;
+        var strNombreSistema = document.querySelector('#txtNombreSistemaNuevo').value;
+        var strAbreviacionSistema = document.querySelector('#txtAbreviacionSistemaNuevo').value;
+        var strRegimen = document.querySelector('#txtRegimenNuevo').value;
+        var strServicio = document.querySelector('#txtServicioNuevo').value;
+        var strCategoria = document.querySelector('#txtCategoriaNuevo').value;
+        var intClaveCentroTrabajo = document.querySelector('#txtClaveCentroTrabajoNuevo').value;
+        var intEstado = document.querySelector('#listEstadoNuevo').value;
+        var intMunicipio = document.querySelector('#listMunicipioNuevo').value;
+        var intLocalidad = document.querySelector('#listLocalidadNuevo').value;
+        var strDomicilio = document.querySelector('#txtDomicilioNuevo').value;
+        var strColonia = document.querySelector('#txtColoniaNuevo').value;
+        var intCodigoPostal = document.querySelector('#txtCodigoPostalNuevo').value;
+
+        if (strNombrePlantel == '' || strAbreviacionPlantel == '' || strNombreSistema == '' || strAbreviacionSistema == '' || strRegimen == '' || 
+            strServicio == '' || strCategoria == ''  || intClaveCentroTrabajo == '' || intEstado == '' || intMunicipio == '' || 
+            intLocalidad == '' || strDomicilio == '' || strColonia == '' || intCodigoPostal == ''){
+                swal.fire("Atención", "Atención todos los campos son obligatorios", "warning");
+                return false;
+        }
+        var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+        var ajaxUrl = base_url+'/Plantel/setPlantel/'+conexionSeleccionada;
+        var formData = new FormData(formPlantel);
+        request.open("POST",ajaxUrl,true);
+            request.send(formData);
+            request.onreadystatechange = function() {
+                if(request.readyState == 4 && request.status == 200) {
+                    var objData = JSON.parse(request.responseText);
+                    if(objData.estatus){
+                        $('#ModalFormPlantelNuevo').modal("hide");
+                        formPlantel.reset();
+                        swal.fire("Planteles", objData.msg, "success").then((result) =>{
+                            $('.close').click();
+                        });
+                        tablePlantel.api().ajax.reload();  
+                    }else{
+                        swal.fire("Error", objData.msg, "error");
+                    }
+                }
+                return false;
+            } 
+    }
+});
+function mostrarPlantelesDatatable(nomConexion){
+    tablePlantel = $('#tablePlantel').dataTable( {
 		"aProcessing":true,
 		"aServerSide":true,
         "language": {
         	"url": " "+base_url+"/Assets/plugins/Spanish.json"
         },
         "ajax":{
-            "url": " "+base_url+"/Plantel/getPlanteles",
+            "url": " "+base_url+"/Plantel/getPlanteles/"+nomConexion,
             "dataSrc":""
         },
         "columns":[
@@ -48,58 +100,8 @@ document.addEventListener('DOMContentLoaded', function(){
 	    "order": [[ 0, "asc" ]],
 	    "iDisplayLength": 25
     });
-
-    //Funcion para Guardar Nuevo Plantel
-    var formPlantel = document.querySelector("#formNuevoPlantel");
-    formPlantel.onsubmit = function(e){
-        e.preventDefault();
-        document.querySelector("#idPlantelNuevo").value = 1;
-        var strNombrePlantel = document.querySelector('#txtNombrePlantelNuevo').value;
-        var strAbreviacionPlantel = document.querySelector('#txtAbreviacionPlantelNuevo').value;
-        var strNombreSistema = document.querySelector('#txtNombreSistemaNuevo').value;
-        var strAbreviacionSistema = document.querySelector('#txtAbreviacionSistemaNuevo').value;
-        var strRegimen = document.querySelector('#txtRegimenNuevo').value;
-        var strServicio = document.querySelector('#txtServicioNuevo').value;
-        var strCategoria = document.querySelector('#txtCategoriaNuevo').value;
-        //var intAcuerdoIncorporacion = document.querySelector('#txtAcuerdoIncorporacionNuevo').value;
-        var intClaveCentroTrabajo = document.querySelector('#txtClaveCentroTrabajoNuevo').value;
-        var intEstado = document.querySelector('#listEstadoNuevo').value;
-        var intMunicipio = document.querySelector('#listMunicipioNuevo').value;
-        var intLocalidad = document.querySelector('#listLocalidadNuevo').value;
-        var strDomicilio = document.querySelector('#txtDomicilioNuevo').value;
-        var strColonia = document.querySelector('#txtColoniaNuevo').value;
-        var intCodigoPostal = document.querySelector('#txtCodigoPostalNuevo').value;
-
-        if (strNombrePlantel == '' || strAbreviacionPlantel == '' || strNombreSistema == '' || strAbreviacionSistema == '' || strRegimen == '' || 
-            strServicio == '' || strCategoria == ''  || intClaveCentroTrabajo == '' || intEstado == '' || intMunicipio == '' || 
-            intLocalidad == '' || strDomicilio == '' || strColonia == '' || intCodigoPostal == ''){
-                swal.fire("Atención", "Atención todos los campos son obligatorios", "warning");
-                return false;
-        }
-        var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-        var ajaxUrl = base_url+'/Plantel/setPlantel';
-        var formData = new FormData(formPlantel);
-        request.open("POST",ajaxUrl,true);
-            request.send(formData);
-            request.onreadystatechange = function() {
-                if(request.readyState == 4 && request.status == 200) {
-                    var objData = JSON.parse(request.responseText);
-                    if(objData.estatus){
-                        $('#ModalFormPlantelNuevo').modal("hide");
-                        formPlantel.reset();
-                        swal.fire("Planteles", objData.msg, "success").then((result) =>{
-                            $('.close').click();
-                        });
-                        tablePlantel.api().ajax.reload();  
-                    }else{
-                        swal.fire("Error", objData.msg, "error");
-                    }
-                }
-                return false;
-            }
-    }
-});
-$('#tablePlantel').DataTable();
+    $('#tablePlantel').DataTable();
+}
 
 
 
@@ -373,12 +375,13 @@ function displayImageSistemaEdit(f) {
 }
 
 //Funcion para Editar Plantel
-function fntEditPlantel(idPlantel){
+function fntEditPlantel(value,idPlantel){
     var idplantel = idPlantel;
+    let nomConexion = value.getAttribute('con');
     $('#step1-tabEdit').click();
     tabActualEdit = 0;
     var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-    var ajaxUrl  = base_url+'/Plantel/getPlantel/'+idplantel;
+    var ajaxUrl  = base_url+'/Plantel/getPlantel/'+idplantel+'/'+nomConexion;
     request.open("GET",ajaxUrl ,true);
 	request.send();
     request.onreadystatechange = function(){
@@ -608,6 +611,17 @@ var formEditPlantel = document.querySelector("#formEditPlantel");
             }
     }
 
+function fnConexionDbSeleccionada(value){
+    if(value == 'all'){
+        document.getElementById('btnNuevo_plantel').style.display = "none";
+        mostrarPlantelesDatatable('all');
+    }else{
+        document.getElementById('btnNuevo_plantel').style.display = "inline";
+        conexionSeleccionada = value;
+        mostrarPlantelesDatatable(value);
+    }
+}    
+
 //Funcion para Aceptar solo Numeros en un Input
 function validarNumeroInput(event){
     if(event.charCode >= 48 && event.charCode <= 57){
@@ -616,6 +630,10 @@ function validarNumeroInput(event){
     return false;
 }
 function btnNuevoPlantel(){
+    if(conexionSeleccionada == ''){
+        swal.fire("Atención", "Seleccionar una base de datos", "warning");
+        return false; 
+    }
     $('#step1-tab').click();
     tabActual = 0;
 }

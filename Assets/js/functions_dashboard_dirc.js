@@ -15,15 +15,14 @@ var rvoes = [];
 //var $salesChartPlantel = $('#sales-chart-plantel');
 function plataformaSeleccionada(value){
     let nombrePlantel = document.querySelector('#listPlataformas').options[document.querySelector('#listPlataformas').selectedIndex].text;
-    console.log(nombrePlantel);
     document.querySelector('.plntuno').innerHTML = nombrePlantel;
     var plantel = value;
     fnTotalesCard(plantel);
     plEstudioMateriabyPlantel(plantel);
 
 }
-function fnTotalesCard(plantel){
-    let url = base_url+"/DashboardDirc/getTotalesCard/"+plantel;
+function fnTotalesCard(nomConexion){
+    let url = base_url+"/DashboardDirc/getTotalesCard/"+nomConexion;
     fetch(url).then(res => res.json()).then((resultado) => {
         if(resultado.tipo == "all"){
             document.querySelector('.divnomplant').style.display = "none";
@@ -43,14 +42,16 @@ function fnTotalesCard(plantel){
             document.querySelector('.ple').innerHTML=resultado.plan_estudios;
             document.querySelector('.mat').innerHTML=resultado.materias;
             document.querySelector('.rvoeexp').innerHTML=resultado.rvoes;
-            document.getElementById('btnRvoesExp').setAttribute('onClick', 'fnRvoeExp('+plantel+');' );
+            document.getElementById('btnRvoesExp').setAttribute('onClick', 'fnRvoeExp('+nomConexion+');' );
+
         }
         }).catch(err => { throw err });
 }
-function plEstudioMateriabyPlantel(plantel){
-    let url = base_url+"/DashboardDirc/getPlanEstudiosMateriabyPlantel/"+plantel;
+function plEstudioMateriabyPlantel(nomConexion){
+    let url = base_url+"/DashboardDirc/getPlanEstudiosMateriabyPlantel/"+nomConexion;
     fetch(url).then(res => res.json()).then((resultado) => {
-            arrPlanteles = [];
+      console.log(resultado);
+            /* arrPlanteles = [];
             carreras = [];
             materias = [];
             rvoes = [];
@@ -68,7 +69,7 @@ function plEstudioMateriabyPlantel(plantel){
             fnMostrarGraficaPlantel(carreras,materias);
             document.querySelector('#sales-chart').style.display = "none";
             document.querySelector('#sales-chart-plantel').style.display = "block";
-        }
+        } */
         }).catch(err => { throw err });
 }
 function fnMostrarGrafica(arrPlanteles,carreras,materias){

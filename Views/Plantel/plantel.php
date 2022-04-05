@@ -10,15 +10,20 @@
         <div class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
-                    <div class="col-sm-7">
+                    <div class="col-sm-12">
                         <h1 class="m-0">  <?= $data['page_title'] ?></h1>
                     </div>
-                    <div class="col-sm-5">
-                        <ol class="breadcrumb float-sm-right btn-block">
-                            <button type="button"  class="btn btn-inline btn-primary btn-sm btn-block" data-toggle="modal"  onclick="btnNuevoPlantel()" data-target="#ModalFormNuevoPlantel"><i class="fa fa-plus-circle fa-md"></i> Nuevo</button>
-                            <!--<li class="breadcrumb-item"><i class="fa fa-home fa-md"></i><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active"><a href="<?= base_url(); ?>/roles"><?= $data['page_title'] ?></a></li>-->
-                        </ol>
+                    <div class="col-lg-6 col-md-6">
+                            <label>Selecciona una base de datos para agregar un nuevo plantel</label>
+                            <select class="custom-select" id="listConexion_db_planteles" onchange="fnConexionDbSeleccionada(value)">
+                                <option value="all" selected="">Todos</option>
+                                <?php foreach ($data['planteles'] as $key => $plantel) { ?>
+                                    <option value="<?php echo($plantel['nombre_conexion']) ?>"><?php echo($plantel['nombre_plantel']) ?></option>
+                                <?php }?>
+                            </select>
+                    </div>
+                    <div class="col-sm-5 d-flex align-items-end">
+                            <button type="button" id="btnNuevo_plantel" class="btn btn-inline btn-primary btn-sm btn-block" data-toggle="modal"  onclick="btnNuevoPlantel()" data-target="#ModalFormNuevoPlantel"><i class="fa fa-plus-circle fa-md"></i> Nuevo</button>
                     </div>
                 </div>
             </div>
