@@ -18,18 +18,23 @@
         <div class="container-fluid">
             <!-- CARDS DE TOTALES-->
             <div class="row">
-                <div class="col-12 mb-3">
+                <div class="col-12 mb-3 row">
                     <div class="col-lg-6 col-md-6">
-                        <label>Selecciona una plantel</label>
-                        <select class="custom-select" id="listPlataformas" onchange="plataformaSeleccionada(value)">
+                        <label>Selecciona una base de datos para ver los datos de planteles</label>
+                        <select class="custom-select" id="listSuperplanteles" onchange="superPlantelSeleccionado(value)">
                             <option value="all" selected="">Todos</option>
                         <?php 
-                        foreach ($data['planteles'] as $key => $value) {
+                        foreach ($data['superplanteles'] as $key => $value) {
                             ?>
                                 <option value="<?php echo $value['nombre_conexion'] ?>"><?php echo($value['nombre_plantel'])?></option>
                             <?php
                         }
                         ?>
+                        </select>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <label>Planteles</label>
+                        <select class="custom-select" id="listPlanteles" onchange="plantelSeleccioando(value)">
                         </select>
                     </div>
                 </div>
@@ -150,7 +155,7 @@
                 </div>
                 <!-- ./col -->
             </div>
-            <div class="col-lg-8">
+            <div class="col-lg-8" style="display: none;">
                 <div class="card">
                     <div class="card-header border-0">
                         <div class="d-flex justify-content-between">

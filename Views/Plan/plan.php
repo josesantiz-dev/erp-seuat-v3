@@ -13,7 +13,7 @@
                         <h1 class="m-0"> <?= $data['page_title'] ?></h1>
                     </div>
                     <div class="col-lg-6 col-md-6">
-                            <label>Selecciona una base de datos para agregar un nuevo plantel</label>
+                            <label>Selecciona una base de datos para agregar una nueva organización del programa</label>
                             <select class="custom-select" id="listConexion_db_planteles" onchange="fnConexionDbSeleccionada(value)">
                                 <option value="all" selected="">Todos</option>
                                 <?php foreach ($data['planteles'] as $key => $plantel) { ?>

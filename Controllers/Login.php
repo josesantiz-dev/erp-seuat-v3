@@ -16,7 +16,7 @@
 			$data['page_tag'] = "Login - Escolar SEUAT";
 			$data['page_title'] = "Login";
 			$data['page_name'] = "login";
-            $data['planteles'] = $this->model->selectPlanteles('bd_user');
+         $data['planteles'] = $this->model->selectPlanteles('bd_user');
 			$data['page_functions_js'] = "functions_login.js";
 			$this->views->getView($this,"login",$data);
 		}
