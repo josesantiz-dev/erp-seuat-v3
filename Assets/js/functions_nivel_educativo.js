@@ -1,9 +1,27 @@
 var tableNivelEducativo;
 var formNivelEducativoNuevo = document.querySelector("#formNivelEducativoNuevo");
 var formNivelEducativoEdit = document.querySelector("#formNivelEducativoEdit");
+document.getElementById('btnNuevo_nivel_educativo').style.display = "none";
+let conexionSeleccionada = "";
 
 //Datatable
 document.addEventListener('DOMContentLoaded', function(){
+    mostrarPlantelesDatatable('all');
+});
+
+
+function fnConexionDbSeleccionada(value){
+    if(value == 'all'){
+        document.getElementById('btnNuevo_nivel_educativo').style.display = "none";
+        mostrarPlantelesDatatable('all');
+    }else{
+        document.getElementById('btnNuevo_nivel_educativo').style.display = "inline";
+        conexionSeleccionada = value;
+        mostrarPlantelesDatatable(value);
+    }
+} 
+
+function mostrarPlantelesDatatable(nomConexion){
 	tableNivelEducativo = $('#tableNivelEducativo').dataTable( {
 		"aProcessing":true,
 		"aServerSide":true,
@@ -11,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function(){
         	"url": " "+base_url+"/Assets/plugins/Spanish.json"
         },
         "ajax":{
-            "url": " "+base_url+"/NivelEducativo/getNivelesEducativos",
+            "url": " "+base_url+"/NivelEducativo/getNivelesEducativos/"+nomConexion,
             "dataSrc":""
         },
         "columns":[
@@ -36,8 +54,9 @@ document.addEventListener('DOMContentLoaded', function(){
 	    "order": [[ 0, "asc" ]],
 	    "iDisplayLength": 25
     });
-});
-$('#tableNivelEducativo').DataTable();
+    $('#tableNivelEducativo').DataTable();
+
+}
 
 //Nuevo Nivel educativo
 formNivelEducativoNuevo.onsubmit = function(e){
@@ -52,7 +71,7 @@ formNivelEducativoNuevo.onsubmit = function(e){
         return false;
     }
     var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-    var ajaxUrl = base_url+'/NivelEducativo/setNivelEducativo';
+    var ajaxUrl = base_url+'/NivelEducativo/setNivelEducativo/'+conexionSeleccionada;
     var formData = new FormData(formNivelEducativoNuevo);
     request.open("POST",ajaxUrl,true);
     request.send(formData);
@@ -74,10 +93,11 @@ formNivelEducativoNuevo.onsubmit = function(e){
 }
 
 //Editar Nivel Educativo
-function fntEditNivelEducativo(idNivelEducativo){
+function fntEditNivelEducativo(value,idNivelEducativo){
+    let nomConexion = value.getAttribute('con');
     var idNivelEducativo = idNivelEducativo;
     var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-    var ajaxUrl  = base_url+'/NivelEducativo/getNivelEducativo/'+idNivelEducativo;
+    var ajaxUrl  = base_url+'/NivelEducativo/getNivelEducativo/'+idNivelEducativo+'/'+nomConexion;
     request.open("GET",ajaxUrl ,true);
 	request.send();
     request.onreadystatechange = function(){
@@ -85,6 +105,7 @@ function fntEditNivelEducativo(idNivelEducativo){
             var objData = JSON.parse(request.responseText);
             if(objData){   
                 document.querySelector("#idEdit").value = objData.id;
+                document.querySelector('#nomConexion_edit').value = nomConexion;
                 document.querySelector("#txtNombreEdit").value = objData.nombre_nivel_educativo;
                 document.querySelector("#txtAbreviaturaEdit").value = objData.abreviatura;
                 document.querySelector("#txtOrdenEdit").value = objData.orden;
@@ -142,7 +163,8 @@ formNivelEducativoEdit.onsubmit = function(e){
 }
 
 //Funcion para Eliminar Nivel Educativo
-function fntDelNivelEducativo(id) {
+function fntDelNivelEducativo(value,id) {
+    let nomConexion = value.getAttribute('con');
     swal.fire({
         icon: "question",
         title: "Eliminar nivel educativo?",
@@ -156,7 +178,7 @@ function fntDelNivelEducativo(id) {
         if (result.isConfirmed) 
         {
             var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-            var ajaxUrl = base_url+'/NivelEducativo/delNivelEducativo'; 
+            var ajaxUrl = base_url+'/NivelEducativo/delNivelEducativo/'+nomConexion; 
             var strData = "idNivelEducativo="+id;
             request.open("POST",ajaxUrl,true);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");

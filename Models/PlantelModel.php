@@ -21,7 +21,7 @@
 
 		//Funcion para consultar lista de Planteles
         public function selectPlanteles(string $nombreConexion){
-            $sql = "SELECT *FROM t_planteles";
+            $sql = "SELECT *FROM t_planteles WHERE estatus != 0";
             $request = $this->select_all($sql,$nombreConexion);
             return $request;
         }
@@ -197,13 +197,13 @@
 			}
 			return $request;  	
 		}
-		public function deletePlantel(int $idPlantel){
+		public function deletePlantel(int $idPlantel, string $nomConexion){
 			$sql = "SELECT * FROM t_planteles WHERE id = $idPlantel";
-			$request = $this->select_all($sql);
+			$request = $this->select_all($sql, $nomConexion);
 			if($request){
 				$sql = "UPDATE t_planteles SET estatus = ? WHERE id = $idPlantel";
 				$arrData = array(0);
-				$request = $this->update($sql,$arrData);
+				$request = $this->update($sql,$nomConexion,$arrData);
 				if($request){
 					$request = 'ok';	
 				}else{
@@ -212,21 +212,21 @@
 			}
 		return $request;	
 		}
-		public function getTablasRef(){
+		public function getTablasRef(string $nomConexion){
 			$sqlTablasRef = "SELECT TABLE_NAME AS tablas FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE REFERENCED_TABLE_NAME = 't_planteles'";
-			$requestTablasRef = $this->select_all($sqlTablasRef);
+			$requestTablasRef = $this->select_all($sqlTablasRef,$nomConexion);
 			return $requestTablasRef;
 		}
-		public function estatusRegistroTabla(string $nombreTabla,int $idPlantel){
+		public function estatusRegistroTabla(string $nombreTabla,int $idPlantel, string $nomConexion){
 			$sqlEstatusRegistro = "SELECT * FROM t_planteles
 			RIGHT JOIN $nombreTabla ON $nombreTabla.id_plantel = t_planteles.id
 			WHERE t_planteles.id = $idPlantel AND  $nombreTabla.estatus != 0";
-			$requestEstatusRegistro = $this->select_all($sqlEstatusRegistro);
+			$requestEstatusRegistro = $this->select_all($sqlEstatusRegistro,$nomConexion);
 			return $requestEstatusRegistro;
 		}
-		public function selectColumn(string $nombreTabla){
+		public function selectColumn(string $nombreTabla,string $nomConexion){
             $sql = "SHOW COLUMNS FROM $nombreTabla LIKE 'estatus'";
-            $request = $this->select($sql);
+            $request = $this->select($sql, $nomConexion);
             return $request;
         }
 	}

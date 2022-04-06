@@ -1,8 +1,27 @@
 var tableMaterias;
 var formMateriaNueva = document.querySelector("#formMateriaNueva");
 var formMateriadit = document.querySelector("#formMateriaEdit");
+document.getElementById('btnNuevo_materias').style.display = "none";
+let conexionSeleccionada = "";
+
 //Datatable
 document.addEventListener('DOMContentLoaded', function(){
+    mostrarPlantelesDatatable('all');
+
+});
+
+function fnConexionDbSeleccionada(value){
+    if(value == 'all'){
+        document.getElementById('btnNuevo_materias').style.display = "none";
+        mostrarPlantelesDatatable('all');
+    }else{
+        document.getElementById('btnNuevo_materias').style.display = "inline";
+        conexionSeleccionada = value;
+        mostrarPlantelesDatatable(value);
+    }
+}
+
+function mostrarPlantelesDatatable(nomConexion){
 	tableMaterias = $('#tableMaterias').dataTable( {
 		"aProcessing":true,
 		"aServerSide":true,
@@ -10,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function(){
         	"url": " "+base_url+"/Assets/plugins/Spanish.json"
         },
         "ajax":{
-            "url": " "+base_url+"/Materias/getMaterias",
+            "url": " "+base_url+"/Materias/getMaterias/"+nomConexion,
             "dataSrc":""
         },
         "columns":[
@@ -37,8 +56,8 @@ document.addEventListener('DOMContentLoaded', function(){
 	    "order": [[ 0, "asc" ]],
 	    "iDisplayLength": 25
     });
-});
-$('#tableMaterias').DataTable();
+    $('#tableMaterias').DataTable();    
+}
 
 //Nueva Materia
 formMateriaNueva.onsubmit = function(e){
@@ -61,7 +80,7 @@ formMateriaNueva.onsubmit = function(e){
         return false;
     }
     var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-    var ajaxUrl = base_url+'/Materias/setMateria';
+    var ajaxUrl = base_url+'/Materias/setMateria/'+conexionSeleccionada;
     var formData = new FormData(formMateriaNueva);
     request.open("POST",ajaxUrl,true);
     request.send(formData);
@@ -84,10 +103,12 @@ formMateriaNueva.onsubmit = function(e){
 }
 
 //Funcion para Ver Materia
-function fntVerMateria(idMateria){
+function fntVerMateria(value,idMateria){
+    let nomConexion = value.getAttribute('con');
+    fnVerMateria(nomConexion);
     var idMateria = idMateria;
     var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-    var ajaxUrl  = base_url+'/Materias/getMateria/'+idMateria;
+    var ajaxUrl  = base_url+'/Materias/getMateria/'+idMateria+'/'+nomConexion;
     request.open("GET",ajaxUrl ,true);
 	request.send();
     request.onreadystatechange = function(){
@@ -121,10 +142,12 @@ function fntVerMateria(idMateria){
 }
 
 //Editar Materias
-function fntEditMateria(idMateria){
+function fntEditMateria(value,idMateria){
+    let nomConexion = value.getAttribute('con');
+    fnEditMateria(nomConexion);
     var idMateria = idMateria;
     var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-    var ajaxUrl  = base_url+'/Materias/getMateria/'+idMateria;
+    var ajaxUrl  = base_url+'/Materias/getMateria/'+idMateria+'/'+nomConexion;
     request.open("GET",ajaxUrl ,true);
 	request.send();
     request.onreadystatechange = function(){
@@ -132,6 +155,7 @@ function fntEditMateria(idMateria){
             var objData = JSON.parse(request.responseText);
             if(objData){
                 document.querySelector("#idEdit").value = objData.id;
+                document.querySelector('#nomConexion_edit').value = nomConexion;
                 document.querySelector('#txtNombreEdit').value = objData.nombre_materia;
                 document.querySelector('#txtClaveEdit').value = objData.clave;
                 document.querySelector('#txtHorasTeoriaEdit').value = objData.hrs_teoria;
@@ -150,10 +174,10 @@ function fntEditMateria(idMateria){
                                 `;
                 document.querySelector("#listTipoEdit").innerHTML = htmlSelect;
 
-                document.querySelector('#listPlantelEdt').querySelector('option[value="'+objData.idplantel+'"]').selected = true;
+                document.querySelector('#listPlantelEdit').querySelector('option[value="'+objData.idplantel+'"]').selected = true;
                 document.querySelector('#listGradoEdit').innerHTML = "<option value='"+objData.id_grado+"' selcted>"+objData.nombre_grado+"("+objData.numero_romano+")"+"</option>";
                 const selGrados = document.querySelector('#listGradoEdit');
-                let url_grados = base_url+"/Materias/getGrados";
+                let url_grados = base_url+"/Materias/getGrados/"+nomConexion;
                 fetch(url_grados)
                     .then(res => res.json())
                     .then((resultado) => {
@@ -167,7 +191,7 @@ function fntEditMateria(idMateria){
                     .catch(err => { throw err });
                 document.querySelector('#listPlanEstudioEdit').innerHTML = "<option value ='"+objData.id_plan+"'selected>"+objData.nombre_carrera+"</option>";
                 const selPlanEstudios = document.querySelector('#listPlanEstudioEdit');
-                let url_plan = base_url+"/Materias/getPlanEstudios";
+                let url_plan = base_url+"/Materias/getPlanEstudios/"+nomConexion;
                 fetch(url_plan)
                     .then(res => res.json())
                     .then((resultado) => {
@@ -208,7 +232,7 @@ formMateriaEdit.onsubmit = function(e){
     var intHoraPractica = document.querySelector('#txtHorasPracticaEdit').value;
     var intCreditos = document.querySelector('#txtCreditosEdit').value;
     var strTipo = document.querySelector('#listTipoEdit').value;
-    var strPlantel = document.querySelector('#listPlantelEdt').value;
+    var strPlantel = document.querySelector('#listPlantelEdit').value;
     var intGrado = document.querySelector('#listGradoEdit').value;
     var intPlanEstudio = document.querySelector('#listPlanEstudioEdit').value;
     var strClasificacion = document.querySelector('#listClasificacionEdit').value;
@@ -240,7 +264,8 @@ formMateriaEdit.onsubmit = function(e){
 }
 
 //Funcion para Eliminar Materia
-function fntDelMateria(id) {
+function fntDelMateria(value,id) {
+    let nomConexion = value.getAttribute('con');
     swal.fire({
         icon: "question",
         title: "Eliminar materia?",
@@ -254,7 +279,7 @@ function fntDelMateria(id) {
         if (result.isConfirmed) 
         {
             var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-            var ajaxUrl = base_url+'/Materias/delMateria'; 
+            var ajaxUrl = base_url+'/Materias/delMateria/'+nomConexion; 
             var strData = "idMateria="+id;
             request.open("POST",ajaxUrl,true);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -277,7 +302,7 @@ function fntDelMateria(id) {
 }
 function plantelSeleccionado(id){
     const selLocalidades = document.querySelector('#listPlanEstudioNuevo');
-    let url_plan = base_url+"/Materias/getPlanEstudiosNuevo?id="+id;
+    let url_plan = base_url+"/Materias/getPlanEstudiosNuevo?id="+id+'&con='+conexionSeleccionada;
     fetch(url_plan)
         .then(res => res.json())
         .then((resultado) => {
@@ -314,4 +339,52 @@ function validarNumeroInput(event){
         return true;
     }
     return false;
+}
+function fnNuevaMateria(){
+    let urlGrados = base_url+'/Materias/getGrados/'+conexionSeleccionada;
+    let urlClasificacion = base_url+'/Materias/getClasificaciones/'+conexionSeleccionada;
+    let urlPlantel = base_url+'/Materias/getPlanteles/'+conexionSeleccionada;
+    fetch(urlGrados).then((res) => res.json()).then(resultado =>{
+        document.querySelector('#listGradoNuevo').innerHTML = '<option value="">Selecciona un grado</option>';
+        resultado.forEach(element => {
+            document.querySelector('#listGradoNuevo').innerHTML += '<option value="'+element.id+'">'+element.nombre_grado+' ('+element.numero_romano+')</option>';
+        });
+    }).catch(err =>{throw err});
+    fetch(urlClasificacion).then((res) => res.json()).then(resultado =>{
+        document.querySelector('#listClasificacionNuevo').innerHTML = '<option value="">Selecciona una clasificación</option>';
+        resultado.forEach(element => {
+            document.querySelector('#listClasificacionNuevo').innerHTML += '<option value="'+element.id+'">'+element.nombre_clasificacion_materia+'</option>';
+        });
+    }).catch(err =>{throw err});
+    fetch(urlPlantel).then((res) => res.json()).then(resultado =>{
+        document.querySelector('#listPlantelNuevo').innerHTML = '<option value="">Selecciona un plantel</option>';
+        resultado.forEach(element => {
+            document.querySelector('#listPlantelNuevo').innerHTML += '<option value="'+element.id+'">'+element.nombre_plantel+' ('+element.municipio+')</option>';
+        });
+    }).catch(err =>{throw err});
+}
+function fnVerMateria(nomConexion){
+    let urlClasificacion = base_url+'/Materias/getClasificaciones/'+nomConexion;
+    fetch(urlClasificacion).then((res) => res.json()).then(resultado =>{
+        document.querySelector('#listClasificacionVer').innerHTML = '<option value="">Selecciona una clasificación</option>';
+        resultado.forEach(element => {
+            document.querySelector('#listClasificacionVer').innerHTML += '<option value="'+element.id+'">'+element.nombre_clasificacion_materia+'</option>';
+        });
+    }).catch(err =>{throw err});
+}
+function fnEditMateria(nomConexion){
+    let urlClasificacion = base_url+'/Materias/getClasificaciones/'+nomConexion;
+    let urlPlantel = base_url+'/Materias/getPlanteles/'+nomConexion;
+    fetch(urlClasificacion).then((res) => res.json()).then(resultado =>{
+        document.querySelector('#listClasificacionEdit').innerHTML = '';
+        resultado.forEach(element => {
+            document.querySelector('#listClasificacionEdit').innerHTML += '<option value="'+element.id+'">'+element.nombre_clasificacion_materia+'</option>';
+        });
+    }).catch(err =>{throw err});
+    fetch(urlPlantel).then((res) => res.json()).then(resultado =>{
+        document.querySelector('#listPlantelEdit').innerHTML = '';
+        resultado.forEach(element => {
+            document.querySelector('#listPlantelEdit').innerHTML += '<option value="'+element.id+'">'+element.nombre_plantel+' ('+element.municipio+')</option>';
+        });
+    }).catch(err =>{throw err});
 }

@@ -27,7 +27,7 @@
 			$data['page_name'] = "plantel";
 			$data['page_content'] = "";
 			$data['page_functions_js'] = "functions_planteles.js";
-			$data['planteles'] = $this->model->selectSuperPlanteles('bd_usr');
+			$data['planteles'] = $this->model->selectSuperPlanteles('bd_user');
 			$data['lista_categorias'] = $this->model->selectCategorias($this->nomConexion); //Traer lista de Categorias
 			$data['lista_estados'] = $this->model->selectEstados($this->nomConexion); //Traer lista de Estados
 			$this->views->getView($this,"plantel",$data);
@@ -38,7 +38,7 @@
 			$arrRes = [];
 			if($nomConexion == 'all'){
 				foreach (conexiones as $key => $conexion) {
-					if($key != 'bd_usr'){
+					if($key != 'bd_user'){
 						$arrData = $this->model->selectPlanteles($key);
 						if(count($arrData) > 0 ){
 							for($i = 0; $i<count($arrData); $i++){
@@ -63,10 +63,10 @@
 					<i class="fas fa-layer-group"></i> &nbsp; Acciones
 					</button>
 					<div class="dropdown-menu">
-						<button class="dropdown-item btn btn-outline-secondary btn-sm btn-flat icono-color-principal btnVerPlantel" onClick="fntVerPlantel('.$newArray[$i]['id'].')" data-toggle="modal" data-target="#ModalVerPlantel" title="Ver"> &nbsp;&nbsp; <i class="fas fa-eye icono-azul"></i> &nbsp; Ver</button>
+						<button class="dropdown-item btn btn-outline-secondary btn-sm btn-flat icono-color-principal btnVerPlantel" con="'.$newArray[$i]['nom_conexion'].'" onClick="fntVerPlantel(this,'.$newArray[$i]['id'].')" data-toggle="modal" data-target="#ModalVerPlantel" title="Ver"> &nbsp;&nbsp; <i class="fas fa-eye icono-azul"></i> &nbsp; Ver</button>
 						<button class="dropdown-item btn btn-outline-secondary btn-sm btn-flat icono-color-principal btnEditPlantel" con="'.$newArray[$i]['nom_conexion'].'" onClick="fntEditPlantel(this,'.$newArray[$i]['id'].')" data-toggle="modal" data-target="#ModalFormEditPlantel" title="Editar"> &nbsp;&nbsp; <i class="fas fa-pencil-alt"></i> &nbsp; Editar</button>
 						<div class="dropdown-divider"></div>
-						<button class="dropdown-item btn btn-outline-secondary btn-sm btn-flat icono-color-principal btnDelPlantel" onClick="fntDelPlantel('.$newArray[$i]['id'].')" title="Eliminar"> &nbsp;&nbsp; <i class="far fa-trash-alt "></i> &nbsp; Eliminar</button>
+						<button class="dropdown-item btn btn-outline-secondary btn-sm btn-flat icono-color-principal btnDelPlantel" con="'.$newArray[$i]['nom_conexion'].'" onClick="fntDelPlantel(this,'.$newArray[$i]['id'].')" title="Eliminar"> &nbsp;&nbsp; <i class="far fa-trash-alt "></i> &nbsp; Eliminar</button>
 						<!--<a class="dropdown-item" href="#">link</a>-->
 					</div>
 				</div>
@@ -113,8 +113,8 @@
 			}
 			
 			if($idPlantelEdit != 0 ){
-				$arrData = $this->model->updatePlantel($idPlantelEdit,$data,$files,$nomConexion);
-				if($arrData['estatus'] != TRUE){
+				$arrData = $this->model->updatePlantel($idPlantelEdit,$data,$files,$_POST['nombreConexionEdit']);
+			    if($arrData['estatus'] != TRUE){
 					$arrResponse = array('estatus' => true, 'msg' => 'Datos actualizados correctamente.');
 				}else{
 					$arrResponse = array('estatus' => false, 'msg' => 'La Clave del centro de trabajo ya existe');
@@ -133,17 +133,17 @@
 		}
 
 		//Funcion para Elimniar un Plantel
-		public function delPlantel(){
+		public function delPlantel($nomConexion){
 			if($_POST){
 					$intIdPlantel = intval($_POST['idPlantel']);
-					$requestTablaRef = $this->model->getTablasRef();
+					$requestTablaRef = $this->model->getTablasRef($nomConexion);
 					if(count($requestTablaRef)>0){
 						$requestStatus = 0;
 						foreach ($requestTablaRef as $key => $tabla) {
 							$nombreTabla = $tabla['tablas'];
-							$existColumn = $this->model->selectColumn($nombreTabla);
+							$existColumn = $this->model->selectColumn($nombreTabla, $nomConexion);
 							if($existColumn){
-								$requestEstatusRegistro = $this->model->estatusRegistroTabla($nombreTabla,$intIdPlantel);
+								$requestEstatusRegistro = $this->model->estatusRegistroTabla($nombreTabla,$intIdPlantel, $nomConexion);
 								if($requestEstatusRegistro){
 									$requestStatus += count($requestEstatusRegistro);
 								}else{
@@ -152,19 +152,19 @@
 							}
 						}
 						if($requestStatus == 0){
-							$requestDelete = $this->model->deletePlantel($intIdPlantel);
+							$requestDelete = $this->model->deletePlantel($intIdPlantel, $nomConexion);
 							if($requestDelete == 'ok'){
 								$arrResponse = array('estatus' => true, 'msg' => 'Se ha eliminado el Plantel.');
 							}else if($requestDelete == 'exist'){
 								$arrResponse = array('estatus' => false, 'msg' => 'No es posible eliminar el plantel.');
 							}else{
 								$arrResponse = array('estatus' => false, 'msg' => 'Error al eliminar el plantel.');
-							} 
+							}
 						}else{
 							$arrResponse = array('estatus' => false, 'msg' => 'No es posible eliminar porque hay plan de estudios activos relacionados a este plantel.');
 						}
 					}else{
-						$requestDelete = $this->model->deletePlantel($intIdPlantel);
+						$requestDelete = $this->model->deletePlantel($intIdPlantel,$nomConexion);
 						if($requestDelete == 'ok'){
 							$arrResponse = array('estatus' => true, 'msg' => 'Se ha eliminado el Plantel.');
 						}else if($requestDelete == 'exist'){

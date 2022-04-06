@@ -12,6 +12,7 @@
                 <div class="card card-secondary">
                     <form id="formPlanEdit" name="formPlanEdit">
                         <input type="hidden" id="idEdit" name="idEdit" value="">
+                        <input type="hidden" id="nomConexion_edit" name="nomConexion_edit" value="">
                         <div class="card-body"> 
                             <div class="form-group">
                                 <label>Nombre</label>

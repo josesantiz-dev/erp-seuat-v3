@@ -1,9 +1,26 @@
 var tablePlanes;
 var formPlanNuevo = document.querySelector("#formPlanNuevo");
 var formPlanEdit = document.querySelector("#formPlanEdit");
+document.getElementById('btnNuevo_plan').style.display = "none";
+let conexionSeleccionada = "";
 
 //Datatable
 document.addEventListener('DOMContentLoaded', function(){
+    mostrarPlantelesDatatable('all');
+});
+
+function fnConexionDbSeleccionada(value){
+    if(value == 'all'){
+        document.getElementById('btnNuevo_plan').style.display = "none";
+        mostrarPlantelesDatatable('all');
+    }else{
+        document.getElementById('btnNuevo_plan').style.display = "inline";
+        conexionSeleccionada = value;
+        mostrarPlantelesDatatable(value);
+    }
+} 
+
+function mostrarPlantelesDatatable(nomConexion){
 	tablePlanes = $('#tablePlanes').dataTable( {
 		"aProcessing":true,
 		"aServerSide":true,
@@ -11,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function(){
         	"url": " "+base_url+"/Assets/plugins/Spanish.json"
         },
         "ajax":{
-            "url": " "+base_url+"/Plan/getPlanes",
+            "url": " "+base_url+"/Plan/getPlanes/"+nomConexion,
             "dataSrc":""
         },
         "columns":[
@@ -35,8 +52,9 @@ document.addEventListener('DOMContentLoaded', function(){
 	    "order": [[ 0, "asc" ]],
 	    "iDisplayLength": 25
     });
-});
-$('#tablePlanes').DataTable();
+    $('#tablePlanes').DataTable();
+}
+
 
 //Nuevo Plan
 formPlanNuevo.onsubmit = function(e){
@@ -50,7 +68,7 @@ formPlanNuevo.onsubmit = function(e){
         return false;
     }
     var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-    var ajaxUrl = base_url+'/Plan/setPlan';
+    var ajaxUrl = base_url+'/Plan/setPlan/'+conexionSeleccionada;
     var formData = new FormData(formPlanNuevo);
     request.open("POST",ajaxUrl,true);
     request.send(formData);
@@ -72,10 +90,11 @@ formPlanNuevo.onsubmit = function(e){
 }
 
 //Editar Plan
-function fntEditPlan(idPlan){
+function fntEditPlan(value,idPlan){
+    let nomConexion = value.getAttribute('con');
     var idPlan = idPlan;
     var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-    var ajaxUrl  = base_url+'/Plan/getPlan/'+idPlan;
+    var ajaxUrl  = base_url+'/Plan/getPlan/'+idPlan+'/'+nomConexion;
     request.open("GET",ajaxUrl ,true);
 	request.send();
     request.onreadystatechange = function(){
@@ -83,6 +102,7 @@ function fntEditPlan(idPlan){
             var objData = JSON.parse(request.responseText);
             if(objData){   
                 document.querySelector("#idEdit").value = objData.id;
+                document.querySelector('#nomConexion_edit').value = nomConexion;
                 document.querySelector("#txtNombreEdit").value = objData.nombre_plan;
                 document.querySelector("#txtAbreviaturaEdit").value = objData.abreviatura;
                 if(objData.estatus == 1)
@@ -135,7 +155,8 @@ formPlanEdit.onsubmit = function(e){
 }
 
 //Funcion para Eliminar Plan
-function fntDelPlan(id) {
+function fntDelPlan(value,id) {
+    let nomConexion = value.getAttribute('con');
     swal.fire({
         icon: "question",
         title: "Eliminar plan?",
@@ -149,7 +170,7 @@ function fntDelPlan(id) {
         if (result.isConfirmed) 
         {
             var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-            var ajaxUrl = base_url+'/Plan/delPlan'; 
+            var ajaxUrl = base_url+'/Plan/delPlan/'+nomConexion; 
             var strData = "idPlan="+id;
             request.open("POST",ajaxUrl,true);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");

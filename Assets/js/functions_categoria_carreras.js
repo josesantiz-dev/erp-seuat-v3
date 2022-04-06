@@ -1,35 +1,9 @@
+document.getElementById('btnNueva_categoria_carrera').style.display = "none";
+let conexionSeleccionada = "";
 //Mostrar Lista de Planteles de Datatable
 document.addEventListener('DOMContentLoaded', function(){
-	tableCategoriasCarreras = $('#tableCategoriaCarreras').dataTable( {
-		"aProcessing":true,
-		"aServerSide":true,
-        "language": {
-        	"url": " "+base_url+"/Assets/plugins/Spanish.json"
-        },
-        "ajax":{
-            "url": " "+base_url+"/CategoriaCarrera/getCategoriasCarreras",
-            "dataSrc":""
-        },
-        "columns":[
-            {"data":"numeracion"},
-            {"data":"nombre_categoria_carrera"},
-			{"data":"estatus"},
-			{"data":"options"}
+    mostrarPlantelesDatatable('all');
 
-        ],
-        "responsive": true,
-	    "paging": true,
-	    "lengthChange": true,
-	    "searching": true,
-	    "ordering": true,
-	    "info": true,
-	    "autoWidth": false,
-	    "scrollY": '42vh',
-	    "scrollCollapse": true,
-	    "bDestroy": true,
-	    "order": [[ 0, "asc" ]],
-	    "iDisplayLength": 25
-    });
     //Nueva Categoria Carrera
 	var formNuevaCategoria = document.querySelector("#formCategoriaNueva");
 	formNuevaCategoria.onsubmit = function(e) {
@@ -43,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function(){
 			return false;
 		}
 		var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-		var ajaxUrl = base_url+'/CategoriaCarrera/setCategioriaCarrera';
+		var ajaxUrl = base_url+'/CategoriaCarrera/setCategioriaCarrera/'+conexionSeleccionada;
 		var formData = new FormData(formNuevaCategoria);
 		request.open("POST",ajaxUrl,true);
 		request.send(formData);
@@ -67,7 +41,17 @@ document.addEventListener('DOMContentLoaded', function(){
 		}
 	}
 });
-$('#tableCategoriaCarreras').DataTable();
+
+function fnConexionDbSeleccionada(value){
+    if(value == 'all'){
+        document.getElementById('btnNueva_categoria_carrera').style.display = "none";
+        mostrarPlantelesDatatable('all');
+    }else{
+        document.getElementById('btnNueva_categoria_carrera').style.display = "inline";
+        conexionSeleccionada = value;
+        mostrarPlantelesDatatable(value);
+    }
+} 
 
 //Funcion para Ver Categoria Carrera
 /* function fntVerCategoriaCarrera(val){
@@ -98,10 +82,11 @@ $('#tableCategoriaCarreras').DataTable();
 } */
 
 //Funcion para Editar Categoria Carrera
-function fntEditCategoriaCarrera(idCategoria){
+function fntEditCategoriaCarrera(value,idCategoria){
+    let nomConexion = value.getAttribute('con');
     var idCategoriaCarrera = idCategoria;
     var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-    var ajaxUrl  = base_url+'/CategoriaCarrera/getCategoriaCarrera/'+idCategoriaCarrera;
+    var ajaxUrl  = base_url+'/CategoriaCarrera/getCategoriaCarrera/'+idCategoriaCarrera+'/'+nomConexion;
     request.open("GET",ajaxUrl ,true);
 	request.send();
     request.onreadystatechange = function(){
@@ -109,6 +94,7 @@ function fntEditCategoriaCarrera(idCategoria){
             var objData = JSON.parse(request.responseText);
             if(objData){   
                 document.querySelector("#idCategoriaEdit").value = objData.id;
+                document.querySelector('#nomConexion_edit').value = nomConexion;
                 document.querySelector("#txtNombreCategoriaEdit").value = objData.nombre_categoria_carrera;
                 if(objData.estatus == 1)
                 {
@@ -163,7 +149,8 @@ formEditCategoriaCarrera.onsubmit = function(e){
 }
 
 //Funcion para Eliminar Categoria Carreras
-function fntDelCategoriaCarrera(id) {
+function fntDelCategoriaCarrera(value,id) {
+    let nomConexion = value.getAttribute('con');
     swal.fire({
         icon: "question",
         title: "Eliminar categoría",
@@ -177,7 +164,7 @@ function fntDelCategoriaCarrera(id) {
         if (result.isConfirmed) 
         {
             var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-            var ajaxUrl = base_url+'/CategoriaCarrera/delCategoriaCarrera'; 
+            var ajaxUrl = base_url+'/CategoriaCarrera/delCategoriaCarrera/'+nomConexion; 
             var strData = "idCategoriaCarrera="+id;
             request.open("POST",ajaxUrl,true);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -198,6 +185,41 @@ function fntDelCategoriaCarrera(id) {
             }
         }
     });
+}
+
+function mostrarPlantelesDatatable(nomConexion){
+	tableCategoriasCarreras = $('#tableCategoriaCarreras').dataTable( {
+		"aProcessing":true,
+		"aServerSide":true,
+        "language": {
+        	"url": " "+base_url+"/Assets/plugins/Spanish.json"
+        },
+        "ajax":{
+            "url": " "+base_url+"/CategoriaCarrera/getCategoriasCarreras/"+nomConexion,
+            "dataSrc":""
+        },
+        "columns":[
+            {"data":"numeracion"},
+            {"data":"nombre_categoria_carrera"},
+			{"data":"estatus"},
+			{"data":"options"}
+
+        ],
+        "responsive": true,
+	    "paging": true,
+	    "lengthChange": true,
+	    "searching": true,
+	    "ordering": true,
+	    "info": true,
+	    "autoWidth": false,
+	    "scrollY": '42vh',
+	    "scrollCollapse": true,
+	    "bDestroy": true,
+	    "order": [[ 0, "asc" ]],
+	    "iDisplayLength": 25
+    });
+    $('#tableCategoriaCarreras').DataTable();
+
 }
 
 

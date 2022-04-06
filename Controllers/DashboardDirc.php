@@ -22,19 +22,19 @@
 			$data['page_title'] = "Página Dashboard";
 			$data['page_name'] = "Página Dashboard";
 			$data['page_functions_js'] = "functions_dashboard_dirc.js";
-			$data['planteles'] = $this->model->selectPlanteles('bd_usr');
+			$data['planteles'] = $this->model->selectPlanteles('bd_user');
 			$this->views->getView($this,"dashboarddirc",$data);
 		}
 
 		public function getTotalesCard($nomonexion){
 			$conexionConsultar = $nomonexion;
 			if($conexionConsultar == 'all'){
-				$totalPlanteles = $this->model->selectTotalPlanteles('bd_usr');
+				$totalPlanteles = $this->model->selectTotalPlanteles('bd_user');
 				$totalPlanEstudios = 0;
 				$totalMaterias = 0;
 				$totalRVOES = 0;
 				foreach (conexiones as $key => $conexion) {
-					if($key != 'bd_usr'){
+					if($key != 'bd_user'){
 						$planEstudios = $this->model->selectTotalesPlanEstudios($key);
 						$totalPlanEstudios += $planEstudios['total'];
 						$materias = $this->model->selectTotalesMaterias($key);
@@ -66,13 +66,15 @@
 		}
 		public function getPlanEstudiosMateriabyPlantel($nomConexion){
 			if($nomConexion == "all"){
-				$arrData = $this->model->selectPlanteles('bd_usr');
+				//$arrData = $this->model->selectPlanteles('bd_user');
 				$array = [];
-				foreach ($arrData as $key => $value) {
-					$arrPlanEstudios = $this->model->selectPlanEstudiosbyPlantel($value['nombre_conexion']);
-					$arrMaterias = $this->model->selectMateriasbyPlantel($value['nombre_conexion']);
-					/*$rvoes = $this->model->selectRVOEproximoExpbyPlantel($value['id']);
-					$array[$value['id']] = array('id_plantel'=>$value['id'],'abreviacion_plantel'=>$value['abreviacion_plantel'],'municipio'=>$value['municipio'],'carreras' => $arrPlanEstudios['total'],'materias'=>$arrMaterias['total'],'rvoes'=>$rvoes); */
+				foreach (conexiones as $key => $conexion) {
+                    if($key != 'bd_user'){
+                        $arrPlanEstudios = $this->model->selectPlanEstudiosbyPlantel($key);
+                       // $arrMaterias = $this->model->selectMateriasbyPlantel($key);
+                       // $rvoes = $this->model->selectRVOEproximoExpbyPlantel($key);
+                        //$array[$key] = array('conexion'=>$key,'abreviacion_plantel'=>$value['abreviacion_plantel'],'municipio'=>$value['municipio'],'carreras' => $arrPlanEstudios['total'],'materias'=>$arrMaterias['total'],'rvoes'=>$rvoes); 
+                    }
 				}
 			}else{
 				$array;

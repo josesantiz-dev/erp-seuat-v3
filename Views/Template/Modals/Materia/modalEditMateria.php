@@ -12,6 +12,7 @@
                 <div class="card card-secondary">
                     <form id="formMateriaEdit" name="formMateriaEdit">
                         <input type="hidden" id="idEdit" name="idEdit" value="">
+                        <input type="hidden" id="nomConexion_edit" name="nomConexion_edit" value="">
                         <div class="card-body">
                             <div class="row">
                                     <div class="form-group col-md-6">
@@ -50,15 +51,8 @@
                                     </div>
                                     <div class="form-group col-md-7">
                                         <label>Plantel</label>
-                                        <select class="form-control form-control-sm" id="listPlantelEdt" name="listPlantelEdit" onchange="plantelSeleccionadoEdit(value)" required >
-                                            <option value="">Selecciona un Plantel</option>
-                                            <?php
-                                                foreach ($data['plantel'] as $value) {
-                                                    ?>
-                                                        <option value="<?php echo $value['id'] ?>"><?php echo($value['nombre_plantel'].' ('.$value['municipio'].')') ?></option>
-                                                    <?php
-                                                }
-                                            ?>
+                                        <select class="form-control form-control-sm" id="listPlantelEdit" name="listPlantelEdit" onchange="plantelSeleccionadoEdit(value)" required >
+                                            
                                         </select>
                                     </div>
                                     <div class="form-group col-md-5">
@@ -70,12 +64,7 @@
                                     <div class="form-group col-md-4">
                                         <label>Clasificación</label>
                                         <select class="form-control form-control-sm" id="listClasificacionEdit" name="listClasificacionEdit" required >
-                                            <option value="">Selecciona una Clasificación</option>
-                                            <?php foreach ($data['clasificacion_materia'] as $key => $value) {
-                                                ?>
-                                                    <option value="<?php echo $value['id']?>"><?php echo $value['nombre_clasificacion_materia'] ?></option>
-                                                <?php
-                                            }?>
+                                            
                                         </select>
                                     </div>
                                     <div class="form-group col-md-3">

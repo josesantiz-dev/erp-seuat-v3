@@ -390,6 +390,7 @@ function fntEditPlantel(value,idPlantel){
             if(objData)
             {   
                 document.querySelector("#idPlantelEdit").value = objData.id
+                document.querySelector('#nombreConexionEdit').value = nomConexion;
                 document.querySelector('#txtNombrePlantelEdit').value = objData.nombre_plantel;
                 document.querySelector('#txtAbreviacionPlantelEdit').value = objData.abreviacion_plantel;
                 document.querySelector('#txtNombreSistemaEdit').value = objData.nombre_sistema;
@@ -482,7 +483,8 @@ function fntEditPlantel(value,idPlantel){
 }
 
 //Funcion para Eliminar Plantel
-function fntDelPlantel(id) {
+function fntDelPlantel(value,idPlantel) {
+    let nomConexion = value.getAttribute('con');
     swal.fire({
         icon: "question",
         title: "Eliminar plantel",
@@ -496,8 +498,8 @@ function fntDelPlantel(id) {
         if (result.isConfirmed) 
         {
             var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-            var ajaxUrl = base_url+'/Plantel/delPlantel'; 
-            var strData = "idPlantel="+id;
+            var ajaxUrl = base_url+'/Plantel/delPlantel/'+nomConexion; 
+            var strData = "idPlantel="+idPlantel;
             request.open("POST",ajaxUrl,true);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             request.send(strData);
@@ -520,10 +522,11 @@ function fntDelPlantel(id) {
 
 //Funcion para Ver Plantel
 //Funcion para Editar Plantel
-function fntVerPlantel(idPlantel){
+function fntVerPlantel(value,idPlantel){
     var idplantel = idPlantel;
+    let nomConexion = value.getAttribute('con');
     var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-    var ajaxUrl  = base_url+'/Plantel/getPlantel/'+idplantel;
+    var ajaxUrl  = base_url+'/Plantel/getPlantel/'+idplantel+'/'+nomConexion;
     request.open("GET",ajaxUrl ,true);
 	request.send();
     request.onreadystatechange = function(){
@@ -540,11 +543,9 @@ function fntVerPlantel(idPlantel){
                 document.querySelector('#txtRegimenVer').value = objData.regimen;
                 document.querySelector('#txtServicioVer').value = objData.servicio;
                 document.querySelector('#txtCategoriaVer').value = objData.categoria;
-                //document.querySelector('#txtAcuerdoIncorporacionVer').value = objData.acuerdo_incorporacion;
                 document.querySelector('#txtClaveCentroTrabajoVer').value = objData.cve_centro_trabajo;
                 document.querySelector('#txtCedulaFuncionamientoVer').value = objData.cedula_funcionamiento;
                 document.querySelector('#txtClaveInstitucionDGPVer').value = objData.cve_institucion_dgp;
-                //document.querySelector('#txtClaveDGPVer').value = objData.cve_dgp;
                 document.querySelector('#txtEstadoVer').innerHTML = "<option selected>"+objData.estado+"</option>"
                 document.querySelector('#txtMunicipioVer').innerHTML = "<option selected>"+objData.municipio+"</option>"
                 document.querySelector('#txtLocalidadVer').innerHTML = "<option selected>"+objData.localidad+"</option>";
@@ -596,7 +597,7 @@ var formEditPlantel = document.querySelector("#formEditPlantel");
             request.onreadystatechange = function() {
                 if(request.readyState == 4 && request.status == 200) {
                     var objData = JSON.parse(request.responseText);
-                     if(objData.estatus){
+                    if(objData.estatus){
                         $('#ModalFormPlantelEdit').modal("hide");
                         formEditPlantel.reset();
                         swal.fire("Planteles", objData.msg, "success").then((result) =>{
