@@ -1,28 +1,35 @@
 <?php
     class Persona extends Controllers{
         private $idUser;
-        public function __construct(){
-            parent::__construct();
-            session_start();
+		private $nomConexion;
+		private $rol;
+		
+        public function __construct()
+		{
+			parent::__construct();
+			session_start();
 		    if(empty($_SESSION['login']))
 		    {
 			    header('Location: '.base_url().'/login');
 			    die();
 		    }
-            $this->idUser = $_SESSION['idUser'];
-        }
+			$this->idUser = $_SESSION['idUser'];
+			$this->nomConexion = $_SESSION['nomConexion'];
+			$this->rol = $_SESSION['claveRol'];
+		}
+        
         public function persona(){
             $data['page_id'] = 9;
             $data['page_tag'] = "Persona";
             $data['page_title'] = "Personas";
             $data['page_content'] = "";
             $data['page_functions_js'] = "functions_persona.js";
-            $data['estados'] = $this->model->selectEstados();
-            $data['categoria_persona'] = $this->model->selectCategoriasPersona();
-            $data['grados_estudios'] = $this->model->selectGradosEstudios();
-            $data['planteles'] = $this->model->selectPlanteles();
-            $data['nivel_carrera_interes'] = $this->model->selectNivelesEducativos();
-            $data['medios_captacion'] = $this->model->selectMediosCaptacion();
+            $data['estados'] = $this->model->selectEstados($this->nomConexion);
+            $data['categoria_persona'] = $this->model->selectCategoriasPersona($this->nomConexion);
+            $data['grados_estudios'] = $this->model->selectGradosEstudios($this->nomConexion);
+            $data['planteles'] = $this->model->selectPlanteles($this->nomConexion);
+            $data['nivel_carrera_interes'] = $this->model->selectNivelesEducativos($this->nomConexion);
+            $data['medios_captacion'] = $this->model->selectMediosCaptacion($this->nomConexion);
             $this->views->getView($this,"persona",$data);
         }
         public function getPersona($idPersona){

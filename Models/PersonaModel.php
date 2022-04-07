@@ -39,19 +39,19 @@
             $request = $this->select($sql);
             return $request;
         }
-        public function selectCategoriasPersona(){
+        public function selectCategoriasPersona(string $nomConexion){
             $sql = "SELECT *FROM t_categoria_personas";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql,$nomConexion);
             return $request;
         }
-        public function selectGradosEstudios(){
+        public function selectGradosEstudios(string $nomConexion){
             $sql = "SELECT *FROM t_escolaridad";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql,$nomConexion);
             return $request;
         }
-        public function selectNivelesEducativos(){
+        public function selectNivelesEducativos(string $nomConexion){
             $sql = "SELECT *FROM t_nivel_educativos";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql, $nomConexion);
             return $request;
         }
         public function insertPersona($data, int $idUSer,int $id_subcampania){
@@ -121,9 +121,9 @@
             $request = $this->update($sql,array($nombre,$apellidoP,$apellidoM,$alias,$direccion,$edad,$CP,$colonia,$telefonoCelular,$telefonoFijo,$email,$estadoCivil,$ocupacion,$CURP,$fechaNacimiento,$nivelCarreraInteres,$carreraInteres,$plantelInteres,$escolaridad,$escuelaProcedencia,$observacion,$idUSer));
             return $request;
         }
-        public function selectEstados(){
+        public function selectEstados(string $nomConexion){
             $sql = "SELECT *FROM t_estados";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql,$nomConexion);
             return $request;
         }
         public function selectMunicipios($idEstado){
@@ -144,14 +144,14 @@
             $request = $this->select_all($sql);
             return $request;
         }
-        public function selectPlanteles(){
+        public function selectPlanteles(string $nomConexion){
             $sql = "SELECT *FROM t_planteles WHERE estatus = 1";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql,$nomConexion);
             return $request;
         }
-        public function selectMediosCaptacion(){
+        public function selectMediosCaptacion(string $nomConexion){
             $sql = "SELECT *FROM t_medio_captacion";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql, $nomConexion);
             return $request;
         }
         public function deletePersona($idPersona){
