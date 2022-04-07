@@ -71,6 +71,11 @@
 			}
 			return $request;
         }
+        public function selectConexion($nomConexion){
+            $sql = "SELECT *FROM t_db WHERE nombre_conexion = '$nomConexion'";
+            $request = $this->select($sql,'bd_user');
+            return $request['nombre_plantel'];
+        }
     }
 
 ?>

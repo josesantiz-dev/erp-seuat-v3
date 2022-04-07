@@ -201,6 +201,7 @@ function mostrarPlantelesDatatable(nomConexion){
         "columns":[
             {"data":"numeracion"},
             {"data":"nombre_categoria_carrera"},
+            {"data":"nom_plantel"},
 			{"data":"estatus"},
 			{"data":"options"}
 

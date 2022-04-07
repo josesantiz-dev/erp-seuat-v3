@@ -35,6 +35,7 @@
                         $arrData = $this->model->selectModalidades($key);
                         for($i =0; $i<count($arrData);$i++){
                             $arrData[$i]['nom_conexion'] = $key;
+                            $arrData[$i]['nombre_plantel'] = $this->model->selectConexion($key);
                         }
                         array_push($arrRes, $arrData);
                     }
@@ -44,6 +45,7 @@
                 $newArray = $this->model->selectModalidades($nomConexion);
                 for($i =0; $i<count($newArray);$i++){
                     $newArray[$i]['nom_conexion'] = $nomConexion;
+                    $newArray[$i]['nombre_plantel'] = $this->model->selectConexion($nomConexion);
                 }
             }
             for ($i=0; $i<count($newArray); $i++){

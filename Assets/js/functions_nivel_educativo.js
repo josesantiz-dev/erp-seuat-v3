@@ -37,6 +37,7 @@ function mostrarPlantelesDatatable(nomConexion){
             {"data":"nombre_nivel_educativo"},
 			{"data":"abreviatura"},
 			{"data":"orden"},
+			{"data":"nom_plantel"},
 			{"data":"estatus"},
             {"data":"options"}
 

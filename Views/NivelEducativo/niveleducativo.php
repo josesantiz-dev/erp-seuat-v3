@@ -44,6 +44,7 @@
                                                 <th>Nombre</th>
                                                 <th>Abreviatura</th>
                                                 <th>Orden</th>
+                                                <th>Plantel</th>
                                                 <th width="15%">Estatus</th>
                                                 <th width="15%">Acciones</th>
                                             </tr>

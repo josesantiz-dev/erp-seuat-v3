@@ -33,6 +33,7 @@
                         $arrData = $this->model->selectNivelesEducativos($key);
                         for($i = 0; $i<count($arrData); $i++){
                             $arrData[$i]['nom_conexion'] = $key;
+                            $arrData[$i]['nom_plantel'] = $this->model->selectConexion($key);
                         }
                         array_push($arrRes,$arrData);
                     }
@@ -42,6 +43,7 @@
                 $newArray = $this->model->selectNivelesEducativos($nomConexion);
                 for($i = 0; $i<count($newArray); $i++){
                     $newArray[$i]['nom_conexion'] = $nomConexion;
+                    $newArray[$i]['nom_plantel'] = $this->model->selectConexion($nomConexion);
                 }
             }
             for ($i=0; $i<count($newArray); $i++){

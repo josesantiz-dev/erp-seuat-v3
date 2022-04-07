@@ -42,6 +42,7 @@
                                             <tr>
                                                 <th width="10%">#</th>
                                                 <th>Nombre</th>
+                                                <th>Plantel</th>
                                                 <th width="20%">Estatus</th>
                                                 <th width="20%">Acciones</th>
                                             </tr>

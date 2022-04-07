@@ -35,6 +35,7 @@ function mostrarPlantelesDatatable(nomConexion){
             {"data":"numeracion"},
             {"data":"nombre_plan"},
             {"data":"abreviatura"},
+            {"data":"nom_plantel"},
 			{"data":"estatus"},
             {"data":"options"}
 

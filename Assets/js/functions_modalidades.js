@@ -169,6 +169,7 @@ function mostrarPlantelesDatatable(nomConexion){
         "columns":[
             {"data":"numeracion"},
             {"data":"nombre_modalidad"},
+            {"data":"nombre_plantel"},
             {"data":"estatus"},
             {"data":"options"}
 
