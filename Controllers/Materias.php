@@ -127,11 +127,11 @@
         }
 
         public function getGrados(string $nomConexion){
-            $arrData = $this->model->selectGrados($nomConexion);
+            /* $arrData = $this->model->selectGrados($nomConexion);
             if($arrData){
-                echo json_encode($arrData,JSON_UNESCAPED_UNICODE);
-                die();
-            }
+            } */
+            echo json_encode($nomConexion,JSON_UNESCAPED_UNICODE);
+            die();
         }
         public function getClasificaciones(string $nomConexion){
             $arrData = $this->model->selectClasificacion($nomConexion);

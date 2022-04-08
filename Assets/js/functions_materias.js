@@ -346,10 +346,10 @@ function fnNuevaMateria(){
     let urlPlantel = base_url+'/Materias/getPlanteles/'+conexionSeleccionada;
     fetch(urlGrados).then((res) => res.json()).then(resultado =>{
         console.log(resultado)
-        document.querySelector('#listGradoNuevo').innerHTML = '<option value="">Selecciona un grado</option>';
+        /* document.querySelector('#listGradoNuevo').innerHTML = '<option value="">Selecciona un grado</option>';
         resultado.forEach(element => {
             document.querySelector('#listGradoNuevo').innerHTML += '<option value="'+element.id+'">'+element.nombre_grado+' ('+element.numero_romano+')</option>';
-        });
+        }); */
     }).catch(err =>{throw err});
     fetch(urlClasificacion).then((res) => res.json()).then(resultado =>{
         document.querySelector('#listClasificacionNuevo').innerHTML = '<option value="">Selecciona una clasificación</option>';
