@@ -33,35 +33,19 @@
                                             <div class="form-group col-md-8">
                                                 <label>Plantel</label>
                                                 <select class="form-control form-control-sm" id="listPlantelNuevo" name="listPlantelNuevo"  required>
-                                                    <option value="">Selecciona un Plantel</option>
-                                                    <?php foreach ($data['planteles'] as $value) {
-                                                        ?>
-                                                            <option value="<?php echo $value['id'] ?>"><?php echo($value['nombre_plantel'].' ('.$value['municipio'].')') ?></option>
-                                                        <?php
-                                                    } ?>
+                                                   
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <label>Nivel educativo</label>
                                                 <select class="form-control form-control-sm" id="listNivelEdNuevo" name="listNivelEdNuevo"  required>
-                                                    <option value="">Selecciona un Nivel Educativo</option>
-                                                    <?php foreach ($data['niveles_educativos'] as $value) {
-                                                        ?>
-                                                            <option value="<?php echo $value['id']?>"><?php echo $value['nombre_nivel_educativo'] ?></option>
-                                                        <?php
-                                                    }?>
+                                                    
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <label>Categoría</label>
                                                 <select class="form-control form-control-sm" id="listCategoriaNuevo" name="listCategoriaNuevo"  required>
-                                                    <option value="">Selecciona una Categoria</option>
-                                                    <?php foreach ($data['categorias'] as $value) {
-                                                        ?>
-                                                        <option value="<?php echo $value['id']?>"> <?php echo $value['nombre_categoria_carrera']?> </option>
-                                                        <?php
-                                                    }
-                                                    ?>
+                                                    
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-4">
@@ -87,24 +71,13 @@
                                             <div class="form-group col-md-4">
                                                 <label>Modalidad</label>
                                                 <select class="form-control form-control-sm" id="listModalidadNuevo" name="listModalidadNuevo"  required>
-                                                    <option value="">Selecciona una Modalidad</option>
-                                                    <?php foreach ($data['modalidad'] as $value) {
-                                                        ?>
-                                                            <option value="<?php echo $value['id'] ?>"> <?php echo $value['nombre_modalidad'] ?></option>
-                                                        <?php
-                                                    }
-                                                    ?>
+                                                    
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <label>Plan</label>
                                                 <select class="form-control form-control-sm" id="listPlanNuevo" name="listPlanNuevo"  required>
-                                                    <option value="">Selecciona un Plan</option>
-                                                    <?php foreach ($data['plan'] as $value) {
-                                                        ?>
-                                                            <option value="<?php echo $value['id'] ?>"> <?php echo $value['nombre_plan']?> </opion>
-                                                        <?php
-                                                    }?>
+                                                    
                                                 </select>
                                             </div>
                                     </div>
@@ -152,14 +125,7 @@
                                                 <div class="col-md-10">
                                                     <label>Agregar clasificaciones</label>
                                                     <select class="form-control form-control-sm" id="listAgClasificacionNuevo" name="listAgClasificacionNuevo">
-                                                        <option value="">Selecciona las clasificaciones</option>
-                                                        <?php 
-                                                            foreach ($data['clasificacion'] as $key => $clasificacion) {
-                                                                ?>
-                                                                    <option value="<?php echo $clasificacion['id']?>"><?php echo $clasificacion['nombre_clasificacion_materia'] ?></option>
-                                                                <?php
-                                                            }
-                                                        ?>
+                                                       
                                                     </select>
                                                 </div>
                                                 <div class="col-md-2 d-flex align-items-end">

@@ -11,9 +11,26 @@ mostrarTab(tabActual);
 mostrarTabEdit(tabActualEdit);
 var tablePlanEstudios;
 let arrClasificacion = [];
+document.getElementById('btnNuevo_plan_estudios').style.display = "none";
+let conexionSeleccionada = "";
 
 //Datatable
 document.addEventListener('DOMContentLoaded', function(){
+    mostrarPlantelesDatatable('all');
+});
+
+function fnConexionDbSeleccionada(value){
+    if(value == 'all'){
+        document.getElementById('btnNuevo_plan_estudios').style.display = "none";
+        mostrarPlantelesDatatable('all');
+    }else{
+        document.getElementById('btnNuevo_plan_estudios').style.display = "inline";
+        conexionSeleccionada = value;
+        mostrarPlantelesDatatable(value);
+    }
+} 
+
+function mostrarPlantelesDatatable(nomConexion){
 	tablePlanEstudios = $('#tablePlanEstudios').dataTable( {
 		"aProcessing":true,
 		"aServerSide":true,
@@ -21,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function(){
         	"url": " "+base_url+"/Assets/plugins/Spanish.json"
         },
         "ajax":{
-            "url": " "+base_url+"/PlanEstudios/getPlanEstudios",
+            "url": " "+base_url+"/PlanEstudios/getPlanEstudios/"+nomConexion,
             "dataSrc":""
         },
         "columns":[
@@ -48,9 +65,9 @@ document.addEventListener('DOMContentLoaded', function(){
 	    "order": [[ 0, "asc" ]],
 	    "iDisplayLength": 25
     });
-});
-$('#tablePlanEstudios').DataTable();
+    $('#tablePlanEstudios').DataTable();
 
+}
 
 function fnNavTab(numTab){
   tabActual = numTab;
@@ -237,7 +254,7 @@ formPlanEstudiosNuevo.onsubmit = function(e) {
     return false;
   }
   var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-  var ajaxUrl = base_url+'/PlanEstudios/setPlanEstudios/'+arr;
+  var ajaxUrl = base_url+'/PlanEstudios/setPlanEstudios?valores='+arr+'&con='+conexionSeleccionada;
   var formData = new FormData(formPlanEstudiosNuevo);
   request.open("POST",ajaxUrl,true);
   request.send(formData);
@@ -262,10 +279,11 @@ formPlanEstudiosNuevo.onsubmit = function(e) {
 }
 
 //Funcion para Ver Plan Estudios
-function fntVerPlanEstudios(idPlanEstudio){
+function fntVerPlanEstudios(value,idPlanEstudio){
+    let nomConexion = value.getAttribute('con');
     var idPlanEstudio = idPlanEstudio;
     var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-    var ajaxUrl  = base_url+'/PlanEstudios/getPlanEstudio/'+idPlanEstudio;
+    var ajaxUrl  = base_url+'/PlanEstudios/getPlanEstudio/'+idPlanEstudio+'/'+nomConexion;
     request.open("GET",ajaxUrl ,true);
 	request.send();
     request.onreadystatechange = function(){
@@ -315,12 +333,14 @@ function fntVerPlanEstudios(idPlanEstudio){
 }
 
 //Funcion para Ver Plan Estudios
-function fntEditPlanEstudios(idPlanEstudio){
+function fntEditPlanEstudios(value,idPlanEstudio){
+    let nomConexion = value.getAttribute('con');
+    btnPlanEstudioEdit(nomConexion);
     $('#step1-tabEdit').click();
    tabActualEdit = 0;
     var idPlanEstudio = idPlanEstudio;
     var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-    var ajaxUrl  = base_url+'/PlanEstudios/getPlanEstudioEdit/'+idPlanEstudio;
+    var ajaxUrl  = base_url+'/PlanEstudios/getPlanEstudioEdit/'+idPlanEstudio+'/'+nomConexion;
     request.open("GET",ajaxUrl ,true);
 	request.send();
     request.onreadystatechange = function(){
@@ -329,6 +349,7 @@ function fntEditPlanEstudios(idPlanEstudio){
             if(objData)
             {   
                 document.querySelector("#idEdit").value = objData.plan_estudio.id;
+                document.querySelector('#nomConexion_edit').value = nomConexion;
                 document.querySelector('#txtNombreEdit').value = objData.plan_estudio.nombre_carrera;
                 document.querySelector('#txtNombrecortoEdit').value = objData.plan_estudio.nombre_carrera_corto;
                 document.querySelector('#listPlantelEdit').querySelector('option[value="'+objData.plan_estudio.id_plantel+'"]').selected = true;
@@ -416,14 +437,14 @@ formEditPlanEstudios.onsubmit = function(e){
           return false;
         }
         var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-        var ajaxUrl = base_url+'/PlanEstudios/setPlanEstudios/'+arr;
+        var ajaxUrl = base_url+'/PlanEstudios/setPlanEstudios/?valores='+arr+'&con=null';
         var formData = new FormData(formEditPlanEstudios);
         request.open("POST",ajaxUrl,true);
             request.send(formData);
             request.onreadystatechange = function() {
                 if(request.readyState == 4 && request.status == 200) {
                     var objData = JSON.parse(request.responseText);
-                      if(objData.estatus){
+                    if(objData.estatus){
                         $('#ModalFormEditPlanEstudios').modal("hide");
                         formEditPlanEstudios.reset();
                         swal.fire("Plan de estudios", objData.msg, "success").then((result) =>{
@@ -440,7 +461,8 @@ formEditPlanEstudios.onsubmit = function(e){
 
 
 //Funcion para Eliminar Plan de Estudios
-function fntDelPlanEstudios(id) {
+function fntDelPlanEstudios(value,id) {
+    let nomConexion = value.getAttribute('con');
     swal.fire({
         icon: "question",
         title: "Eliminar plan de estudios?",
@@ -454,7 +476,7 @@ function fntDelPlanEstudios(id) {
         if (result.isConfirmed) 
         {
             var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-            var ajaxUrl = base_url+'/PlanEstudios/delPlanEstudio'; 
+            var ajaxUrl = base_url+'/PlanEstudios/delPlanEstudio/'+nomConexion; 
             var strData = "idPlanEstudio="+id;
             request.open("POST",ajaxUrl,true);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -626,8 +648,95 @@ function validarNumeroInput(event){
 
 
 function btnPlanEstudioNuevo(){
-  arrClasificacion = [];
+    let ulrPlantel = base_url+'/PlanEstudios/getPlanteles/'+conexionSeleccionada;
+    let urlNivelEdicativo = base_url+'/PlanEstudios/getNivelesEducativos/'+conexionSeleccionada;
+    let urlCategorias = base_url+'/PlanEstudios/getCategorias/'+conexionSeleccionada;
+    let urlModalidad = base_url+'/PlanEstudios/getModalidades/'+conexionSeleccionada;
+    let urlPlan = base_url+'/PlanEstudios/getPlanes/'+conexionSeleccionada;
+    let urlClasificacion = base_url+'/PlanEstudios/getClacificaciones/'+conexionSeleccionada;
+    fetch(ulrPlantel).then((res) => res.json()).then(resultado =>{
+        document.querySelector('#listPlantelNuevo').innerHTML = '<option value="">Selecciona un Plantel</option>';
+        resultado.forEach(element => {
+            document.querySelector('#listPlantelNuevo').innerHTML += '<option value="'+element.id+'">'+element.nombre_plantel+'</option>';
+        });
+    }).catch(err =>{throw err});
+    fetch(urlNivelEdicativo).then((res) => res.json()).then(resultado =>{
+        document.querySelector('#listNivelEdNuevo').innerHTML = '<option value="">Selecciona un Nivel Educativo</option>';
+        resultado.forEach(element => {
+            document.querySelector('#listNivelEdNuevo').innerHTML += '<option value="'+element.id+'">'+element.nombre_nivel_educativo+'</option>';
+        });
+    }).catch(err =>{throw err});
+    fetch(urlCategorias).then((res) => res.json()).then(resultado =>{
+        document.querySelector('#listCategoriaNuevo').innerHTML = '<option value="">Selecciona una Categoria</option>';
+        resultado.forEach(element => {
+            document.querySelector('#listCategoriaNuevo').innerHTML += '<option value="'+element.id+'">'+element.nombre_categoria_carrera+'</option>';
+        });
+    }).catch(err =>{throw err});
+    fetch(urlModalidad).then((res) => res.json()).then(resultado =>{
+        document.querySelector('#listModalidadNuevo').innerHTML = '<option value="">Selecciona una Modalidad</option>';
+        resultado.forEach(element => {
+            document.querySelector('#listModalidadNuevo').innerHTML += '<option value="'+element.id+'">'+element.nombre_modalidad+'</option>';
+        });
+    }).catch(err =>{throw err});
+    fetch(urlPlan).then((res) => res.json()).then(resultado =>{
+        document.querySelector('#listPlanNuevo').innerHTML = '<option value="">Selecciona un Plan</option>';
+        resultado.forEach(element => {
+            document.querySelector('#listPlanNuevo').innerHTML += '<option value="'+element.id+'">'+element.nombre_plan+'</option>';
+        });
+    }).catch(err =>{throw err});
+    fetch(urlClasificacion).then((res) => res.json()).then(resultado =>{
+        document.querySelector('#listAgClasificacionNuevo').innerHTML = '<option value="">Selecciona las clasificaciones</option>';
+        resultado.forEach(element => {
+            document.querySelector('#listAgClasificacionNuevo').innerHTML += '<option value="'+element.id+'">'+element.nombre_clasificacion_materia+'</option>';
+        });
+    }).catch(err =>{throw err});
+    arrClasificacion = [];
   document.querySelector('#clasificaciones').innerHTML = "";
   $('#step1-tab').click();
   tabActual = 0;
+}
+
+function btnPlanEstudioEdit(nomConexion){
+    let ulrPlantel = base_url+'/PlanEstudios/getPlanteles/'+nomConexion;
+    let urlNivelEdicativo = base_url+'/PlanEstudios/getNivelesEducativos/'+nomConexion;
+    let urlCategorias = base_url+'/PlanEstudios/getCategorias/'+nomConexion;
+    let urlModalidad = base_url+'/PlanEstudios/getModalidades/'+nomConexion;
+    let urlPlan = base_url+'/PlanEstudios/getPlanes/'+nomConexion;
+    let urlClasificacion = base_url+'/PlanEstudios/getClacificaciones/'+nomConexion;
+    fetch(ulrPlantel).then((res) => res.json()).then(resultado =>{
+        document.querySelector('#listPlantelEdit').innerHTML = '';
+        resultado.forEach(element => {
+            document.querySelector('#listPlantelEdit').innerHTML += '<option value="'+element.id+'">'+element.nombre_plantel+'</option>';
+        });
+    }).catch(err =>{throw err});
+    fetch(urlNivelEdicativo).then((res) => res.json()).then(resultado =>{
+        document.querySelector('#listNivelEdEdit').innerHTML = '';
+        resultado.forEach(element => {
+            document.querySelector('#listNivelEdEdit').innerHTML += '<option value="'+element.id+'">'+element.nombre_nivel_educativo+'</option>';
+        });
+    }).catch(err =>{throw err});
+    fetch(urlCategorias).then((res) => res.json()).then(resultado =>{
+        document.querySelector('#listCategoriaEdit').innerHTML = '';
+        resultado.forEach(element => {
+            document.querySelector('#listCategoriaEdit').innerHTML += '<option value="'+element.id+'">'+element.nombre_categoria_carrera+'</option>';
+        });
+    }).catch(err =>{throw err});
+    fetch(urlModalidad).then((res) => res.json()).then(resultado =>{
+        document.querySelector('#listModalidadEdit').innerHTML = '';
+        resultado.forEach(element => {
+            document.querySelector('#listModalidadEdit').innerHTML += '<option value="'+element.id+'">'+element.nombre_modalidad+'</option>';
+        });
+    }).catch(err =>{throw err});
+    fetch(urlPlan).then((res) => res.json()).then(resultado =>{
+        document.querySelector('#listPlanEdit').innerHTML = '';
+        resultado.forEach(element => {
+            document.querySelector('#listPlanEdit').innerHTML += '<option value="'+element.id+'">'+element.nombre_plan+'</option>';
+        });
+    }).catch(err =>{throw err});
+    fetch(urlClasificacion).then((res) => res.json()).then(resultado =>{
+        document.querySelector('#listAgClasificacionEdit').innerHTML = '';
+        resultado.forEach(element => {
+            document.querySelector('#listAgClasificacionEdit').innerHTML += '<option value="'+element.id+'">'+element.nombre_clasificacion_materia+'</option>';
+        });
+    }).catch(err =>{throw err});
 }

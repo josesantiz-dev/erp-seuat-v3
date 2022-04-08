@@ -1,42 +1,14 @@
 var tableModalidad;
 var formModalidad = document.querySelector("#formModalidad");
 var formModalidadEdit = document.querySelector("#formModalidadEdit");
+let conexionSeleccionada = "";
+document.getElementById('btnNuevo_plantel').style.display = "none";
 
 //Funcion para Datatable de Mostrar todas las Modalidades
 document.addEventListener('DOMContentLoaded', function(){
-	tableModalidad = $('#tableModalidad').dataTable( {
-		"aProcessing":true,
-		"aServerSide":true,
-        "language": {
-        	"url": " "+base_url+"/Assets/plugins/Spanish.json"
-        },
-        "ajax":{
-            "url": " "+base_url+"/Modalidades/getModalidades",
-            "dataSrc":""
-        },
-        "columns":[
-            {"data":"numeracion"},
-            {"data":"nombre_modalidad"},
-            {"data":"estatus"},
-            {"data":"options"}
+    mostrarPlantelesDatatable('all');
 
-        ],
-        "responsive": true,
-	    "paging": true,
-	    "lengthChange": true,
-	    "searching": true,
-	    "ordering": true,
-	    "info": true,
-	    "autoWidth": false,
-	    "scrollY": '42vh',
-	    "scrollCollapse": true,
-	    "bDestroy": true,
-	    "order": [[ 0, "asc" ]],
-	    "iDisplayLength": 25
-    });
 });
-$('#tableModalidad').DataTable();
-
 
 //Nueva Modalidad
 formModalidad.onsubmit = function(e){
@@ -49,7 +21,7 @@ formModalidad.onsubmit = function(e){
         return false;
     }
     var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-    var ajaxUrl = base_url+'/Modalidades/setModalidad';
+    var ajaxUrl = base_url+'/Modalidades/setModalidad/'+conexionSeleccionada;
     var formData = new FormData(formModalidad);
     request.open("POST",ajaxUrl,true);
     request.send(formData);
@@ -72,10 +44,11 @@ formModalidad.onsubmit = function(e){
 }
 
 //Editar Modalidad
-function fntEditModalidad(idModalidad){
+function fntEditModalidad(value,idModalidad){
+    let nomConexion = value.getAttribute('con');
     var idModalidad = idModalidad;
     var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-    var ajaxUrl  = base_url+'/Modalidades/getModalidad/'+idModalidad;
+    var ajaxUrl  = base_url+'/Modalidades/getModalidad/'+idModalidad+'/'+nomConexion;
     request.open("GET",ajaxUrl ,true);
 	request.send();
     request.onreadystatechange = function(){
@@ -84,6 +57,7 @@ function fntEditModalidad(idModalidad){
             if(objData){   
                 document.querySelector("#idModalidadEdit").value = objData.id;
                 document.querySelector("#txtModalidadEdit").value = objData.nombre_modalidad;
+                document.querySelector('#nomConexion_edit').value = nomConexion;
                 if(objData.estatus == 1)
                 {
                     var optionSelect = '<option value="1" selected class="notBlock">Activo</option>';
@@ -133,7 +107,8 @@ formModalidadEdit.onsubmit = function(e){
 }
 
 //Funcion para Eliminar Modalidades
-function fntDelModalidad(id) {
+function fntDelModalidad(value,id) {
+    let nomConexion = value.getAttribute('con');
     swal.fire({
         icon: "question",
         title: "Eliminar modalidad",
@@ -147,7 +122,7 @@ function fntDelModalidad(id) {
         if (result.isConfirmed) 
         {
             var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-            var ajaxUrl = base_url+'/Modalidades/delModalidad'; 
+            var ajaxUrl = base_url+'/Modalidades/delModalidad/'+nomConexion; 
             var strData = "idModalidad="+id;
             request.open("POST",ajaxUrl,true);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -167,4 +142,50 @@ function fntDelModalidad(id) {
             }
         }
     });
+}
+
+function fnConexionDbSeleccionada(value){
+    if(value == 'all'){
+        document.getElementById('btnNuevo_plantel').style.display = "none";
+        mostrarPlantelesDatatable('all');
+    }else{
+        document.getElementById('btnNuevo_plantel').style.display = "inline";
+        conexionSeleccionada = value;
+        mostrarPlantelesDatatable(value);
+    }
+} 
+
+function mostrarPlantelesDatatable(nomConexion){
+    tableModalidad = $('#tableModalidad').dataTable( {
+		"aProcessing":true,
+		"aServerSide":true,
+        "language": {
+        	"url": " "+base_url+"/Assets/plugins/Spanish.json"
+        },
+        "ajax":{
+            "url": " "+base_url+"/Modalidades/getModalidades/"+nomConexion,
+            "dataSrc":""
+        },
+        "columns":[
+            {"data":"numeracion"},
+            {"data":"nombre_modalidad"},
+            {"data":"nombre_plantel"},
+            {"data":"estatus"},
+            {"data":"options"}
+
+        ],
+        "responsive": true,
+	    "paging": true,
+	    "lengthChange": true,
+	    "searching": true,
+	    "ordering": true,
+	    "info": true,
+	    "autoWidth": false,
+	    "scrollY": '42vh',
+	    "scrollCollapse": true,
+	    "bDestroy": true,
+	    "order": [[ 0, "asc" ]],
+	    "iDisplayLength": 25
+    });
+    $('#tableModalidad').DataTable();
 }

@@ -63,12 +63,7 @@
                                     <div class="form-group col-md-3">
                                         <label>Clasificación</label>
                                         <select class="form-control form-control-sm" id="listClasificacionVer" name="listClasificacionVer" disabled >
-                                            <option value="">Selecciona una Clasificación</option>
-                                            <?php foreach ($data['clasificacion_materia'] as $key => $value) {
-                                                ?>
-                                                    <option value="<?php echo $value['id']?>"><?php echo $value['nombre_clasificacion_materia'] ?></option>
-                                                <?php
-                                            }?>
+                                            
                                         </select>
                                     </div>
                                     <div class="form-group col-md-2">

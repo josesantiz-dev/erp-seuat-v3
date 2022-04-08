@@ -21,6 +21,7 @@
                     </nav>
                     <form id="formEditPlantel" method = "POST" name="formEditPlantel" enctype="multipart/form-data">
                         <input type="hidden" id="idPlantelEdit" name="idPlantelEdit" value="">
+                        <input type="hidden" id="nombreConexionEdit" name="nombreConexionEdit" value="">
                         <div class="card-body"> 
                                 <div class="tabEdit">
                                     <div class="row">

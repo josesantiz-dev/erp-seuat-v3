@@ -13,9 +13,18 @@
                     <div class="col-sm-7">
                         <h1 class="m-0">  <?= $data['page_title'] ?></h1>
                     </div>
-                    <div class="col-sm-5">
+                    <div class="col-lg-6 col-md-6">
+                            <label>Selecciona una base de datos para agregar una nueva categoría</label>
+                            <select class="custom-select" id="listConexion_db_planteles" onchange="fnConexionDbSeleccionada(value)">
+                                <option value="all" selected="">Todos</option>
+                                <?php foreach ($data['planteles'] as $key => $plantel) { ?>
+                                    <option value="<?php echo($plantel['nombre_conexion']) ?>"><?php echo($plantel['nombre_plantel']) ?></option>
+                                <?php }?>
+                            </select>
+                    </div>
+                    <div class="col-sm-5 d-flex align-items-end">
                         <ol class="breadcrumb float-sm-right btn-block">
-                            <button type="button"  class="btn btn-inline btn-primary btn-sm btn-block" data-toggle="modal" data-target="#ModalFormNuevaCategoriaCarrera"><i class="fa fa-plus-circle fa-md"></i> Nuevo</button>
+                            <button type="button" id="btnNueva_categoria_carrera" class="btn btn-inline btn-primary btn-sm btn-block" data-toggle="modal" data-target="#ModalFormNuevaCategoriaCarrera"><i class="fa fa-plus-circle fa-md"></i> Nuevo</button>
                         </ol>
                     </div>
                 </div>
@@ -34,6 +43,7 @@
                                             <tr>
                                                 <th width="5%">#</th>
                                                 <th>Nombre</th>
+                                                <th>Plantel</th>
                                                 <th width="20%">Estatus</th>
                                                 <th width="20%">Acciones</th>
                                             </tr>
