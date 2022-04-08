@@ -21,6 +21,8 @@
             $data['page_tag'] = "Organización de planes";
             $data['page_title'] = "Organización del plan de programa";
 			$data['planteles'] = $this->model->selectSuperPlanteles('bd_user');
+            $data['nomConexion'] = $this->nomConexion;
+            $data['claveRol'] = $this->rol;
             $data['page_functions_js'] = "functions_plan.js";
             $this->views->getView($this,"plan",$data);
         }

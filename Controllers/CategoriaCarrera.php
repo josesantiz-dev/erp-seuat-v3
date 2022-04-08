@@ -24,6 +24,8 @@
 			$data['page_title'] = "Categorías carreras";
 			$data['page_name'] = "Categorías carreras";
 			$data['planteles'] = $this->model->selectSuperPlanteles('bd_user');
+			$data['nomConexion'] = $this->nomConexion;
+			$data['claveRol'] = $this->rol;
 			$data['page_functions_js'] = "functions_categoria_carreras.js";
 			$this->views->getView($this,"categoriacarrera",$data);
 		}

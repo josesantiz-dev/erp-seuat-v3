@@ -22,6 +22,8 @@
             $data['page_tag'] = "Materias";
             $data['page_title'] = "Materias";
             $data['superplanteles'] = $this->model->selectSuperPlanteles('bd_user');
+            $data['nomConexion'] = $this->nomConexion;
+            $data['claveRol'] = $this->rol;
             $data['page_functions_js'] = "functions_materias.js";
             $this->views->getView($this,"materias",$data);
         }

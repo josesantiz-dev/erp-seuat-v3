@@ -16,7 +16,8 @@ let conexionSeleccionada = "";
 
 //Datatable
 document.addEventListener('DOMContentLoaded', function(){
-    mostrarPlantelesDatatable('all');
+    let nomConexion = document.querySelector('#listConexion_db_planteles').value;
+    mostrarPlantelesDatatable(nomConexion);
 });
 
 function fnConexionDbSeleccionada(value){

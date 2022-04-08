@@ -23,7 +23,9 @@
             $data['page_title'] = "Planes de estudios";
             $data['page_content'] = "";
             $data['page_functions_js'] = "functions_plan_estudios.js";
-            $data['superplanteles'] = $this->model->selectSuperPlanteles('bd_user');
+            $data['planteles'] = $this->model->selectSuperPlanteles('bd_user');
+			$data['nomConexion'] = $this->nomConexion;
+			$data['claveRol'] = $this->rol;
             $this->views->getView($this,"planestudios",$data);
         }
 

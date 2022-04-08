@@ -23,6 +23,7 @@
 			$data['page_name'] = "Página Dashboard";
 			$data['page_functions_js'] = "functions_dashboard_dirc.js";
 			$data['superplanteles'] = $this->model->selectSuperplanteles('bd_user');
+			$data['nomConexion'] = $this->nomConexion;
 			$this->views->getView($this,"dashboarddirc",$data);
 		}
 

@@ -22,6 +22,8 @@
             $data['page_tag'] = "Niveles educativo";
             $data['page_title'] = "Niveles educativos";
 			$data['planteles'] = $this->model->selectSuperPlanteles('bd_user');
+            $data['nomConexion'] = $this->nomConexion;
+            $data['claveRol'] = $this->rol;
             $data['page_functions_js'] = "functions_nivel_educativo.js";
             $this->views->getView($this,"niveleducativo",$data);
         }

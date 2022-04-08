@@ -2,7 +2,8 @@ document.getElementById('btnNueva_categoria_carrera').style.display = "none";
 let conexionSeleccionada = "";
 //Mostrar Lista de Planteles de Datatable
 document.addEventListener('DOMContentLoaded', function(){
-    mostrarPlantelesDatatable('all');
+    let nomConexion = document.querySelector('#listConexion_db_planteles').value;
+    mostrarPlantelesDatatable(nomConexion);
 
     //Nueva Categoria Carrera
 	var formNuevaCategoria = document.querySelector("#formCategoriaNueva");

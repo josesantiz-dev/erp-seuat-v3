@@ -6,7 +6,8 @@ document.getElementById('btnNuevo_plantel').style.display = "none";
 
 //Funcion para Datatable de Mostrar todas las Modalidades
 document.addEventListener('DOMContentLoaded', function(){
-    mostrarPlantelesDatatable('all');
+    let nomConexion = document.querySelector('#listConexion_db_planteles').value;
+    mostrarPlantelesDatatable(nomConexion);
 
 });
 

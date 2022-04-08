@@ -15,7 +15,8 @@ let conexionSeleccionada;
 
 //Mostrar Lista de Planteles de Datatable
 document.addEventListener('DOMContentLoaded', function(){
-    mostrarPlantelesDatatable('all');
+    let nomConexion = document.querySelector('#listConexion_db_planteles').value;
+    mostrarPlantelesDatatable(nomConexion);
     //Funcion para Guardar Nuevo Plantel
     var formPlantel = document.querySelector("#formNuevoPlantel");
     formPlantel.onsubmit = function(e){

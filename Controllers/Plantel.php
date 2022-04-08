@@ -30,6 +30,8 @@
 			$data['planteles'] = $this->model->selectSuperPlanteles('bd_user');
 			$data['lista_categorias'] = $this->model->selectCategorias($this->nomConexion); //Traer lista de Categorias
 			$data['lista_estados'] = $this->model->selectEstados($this->nomConexion); //Traer lista de Estados
+			$data['nomConexion'] = $this->nomConexion;
+			$data['claveRol'] = $this->rol;
 			$this->views->getView($this,"plantel",$data);
 		}
 

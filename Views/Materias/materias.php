@@ -14,6 +14,7 @@
                         <h1 class="m-0"> <?= $data['page_title'] ?></h1>
                     </div>
                     <div class="col-lg-6 col-md-6">
+                        <?php if($data['claveRol'] == 'admin' || $data['claveRol'] == 'superadmin'){ ?>
                             <label>Selecciona una base de datos para agregar una nueva materia</label>
                             <select class="custom-select" id="listConexion_db_planteles" onchange="fnConexionDbSeleccionada(value)">
                                 <option value="all" selected="">Todos</option>
@@ -21,6 +22,13 @@
                                     <option value="<?php echo($plantel['nombre_conexion']) ?>"><?php echo($plantel['nombre_plantel']) ?></option>
                                 <?php }?>
                             </select>
+                        <?php } else { ?>
+                            <select class="custom-select" id="listConexion_db_planteles" onchange="fnConexionDbSeleccionada(value)" style="display: none;">
+                                <?php foreach ($data['superplanteles'] as $key => $plantel) { if($plantel['nombre_conexion'] == $data['nomConexion']){?>
+                                    <option value="<?php echo($plantel['nombre_conexion']) ?>" selected><?php echo($plantel['nombre_plantel']) ?></option>
+                                <?php } }?>
+                            </select>
+                        <?php }?>
                     </div>
                     <div class="col-sm-5 d-flex align-items-end">
                         <ol class="breadcrumb float-sm-right btn-block">

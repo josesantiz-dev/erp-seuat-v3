@@ -24,6 +24,8 @@
             $data['page_title'] = "Modalidades";
             $data['page_name'] = "modalidades";
 			$data['planteles'] = $this->model->selectSuperPlanteles('bd_user');
+            $data['nomConexion'] = $this->nomConexion;
+            $data['claveRol'] = $this->rol;
             $data['page_functions_js'] = "functions_modalidades.js";
             $this->views->getView($this,"modalidades",$data);
         }
