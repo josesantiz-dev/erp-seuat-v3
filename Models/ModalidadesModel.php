@@ -20,7 +20,7 @@
         public function insertModalidad($data,string $nomConexion){
             $idUser = $_SESSION['idUser'];
             $nombreModalidad = $data['txtModalidadNueva'];
-            $request;
+            $request = [];
             //$estatus = $data['listEstatusNueva'];
             $sqlExist = "SELECT *FROM t_modalidades WHERE nombre_modalidad = '$nombreModalidad'";
             $requestExist = $this->select($sqlExist,$nomConexion);
@@ -44,7 +44,7 @@
             $idModalidad = $intIdModalidadEdit;
             $nombreModalidad = $data['txtModalidadEdit'];
             $estatus = $data['listEstatusEdit'];
-            $request;
+            $request = [];
             $sqlExist = "SELECT *FROM t_modalidades WHERE nombre_modalidad = '$nombreModalidad' AND id != $idModalidad";
             $requestExist = $this->select($sqlExist,$nomConexion);
             if($requestExist){

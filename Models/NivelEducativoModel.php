@@ -21,7 +21,7 @@
             $nombreNivelEducativo = $data['txtNombreNuevo'];
             $abreviatura = $data['txtAbreviaturaNuevo'];
             $orden = $data['txtOrdenNuevo'];
-            $request;
+            $request = [];
             if($orden == null){
                 $orden = null;
             }
@@ -54,7 +54,7 @@
             if($orden == null){
                 $orden = null;
             }
-            $request;
+            $request = [];
             $sqlExistNom = "SELECT *FROM t_nivel_educativos WHERE nombre_nivel_educativo = '$nombreNivelEducativo' AND id != $idNivelEducativo";
             $requestExistNom = $this->select($sqlExistNom,$nomConexion);
             if($requestExistNom){

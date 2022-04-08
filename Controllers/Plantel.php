@@ -123,7 +123,11 @@
 			if($idPlantelNuevo == 1){
 				$arrData = $this->model->insertPlantel($data,$files,$nomConexion);
 			    if($arrData['estatus'] != TRUE){
-			        $arrResponse = array('estatus' => true, 'msg' => 'Datos guardados correctamente.');
+					if($arrData['imagen'] == false){
+						$arrResponse = array('estatus' => false, 'msg' => 'No se pudo guardar la imagen.');
+					}else{
+						$arrResponse = array('estatus' => true, 'msg' => 'Datos guardados correctamente.');
+					}
 			    }else{
 			    $arrResponse = array('estatus' => false, 'msg' => '¡Atención! La Clave del centro de trabajo ya existe'); 
                 }

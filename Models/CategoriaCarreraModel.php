@@ -24,7 +24,7 @@
 			$idUser = $_SESSION['idUser'];
 			$nombreCategoriaCarrera = $data['txtNombrecategoriaNueva'];
 			//$estatusCategoriaNueva = $data['listEstatusCategoriaNueva'];
-			$request;
+			$request = [];
 			$sqlExist = "SELECT *FROM t_categoria_carreras WHERE nombre_categoria_carrera = '$nombreCategoriaCarrera'";
 			$requestExist = $this->select($sqlExist,$nomConexion);
 			if($requestExist){
@@ -41,7 +41,7 @@
 			$idCategoria = $idCategoriaCarreraEdit;
 			$nombreCategoriaCarrera = $data['txtNombrecategoriaEdit'];
 			$estatusCategoriaNueva = $data['listEstatusCategoriaEdit'];
-			$request;
+			$request = [];
 			$sqlExist = "SELECT *FROM t_categoria_carreras WHERE nombre_categoria_carrera = '$nombreCategoriaCarrera' AND id != $idCategoria";
 			$requestExist = $this->select($sqlExist,$nomConexion);
 			if($requestExist){

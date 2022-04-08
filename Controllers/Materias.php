@@ -33,6 +33,7 @@
                         $arrData = $this->model->selectMaterias($key);
                         for($i = 0; $i<count($arrData); $i++){
                             $arrData[$i]['nom_conexion'] = $key;
+                            $arrData[$i]['nombre_plantel'] = $this->model->selectConexion($key);
                         }
                         array_push($arrRes, $arrData);
                     }
@@ -42,6 +43,7 @@
                 $newArray = $this->model->selectMaterias($nomConexion);
                 for($i = 0; $i<count($newArray); $i++){
                     $newArray[$i]['nom_conexion'] = $nomConexion;
+                    $newArray[$i]['nombre_plantel'] = $this->model->selectConexion($nomConexion);
                 }
             }
             for ($i=0; $i<count($newArray); $i++){
@@ -127,11 +129,11 @@
         }
 
         public function getGrados(string $nomConexion){
-            /* $arrData = $this->model->selectGrados($nomConexion);
+            $arrData = $this->model->selectGrados($nomConexion);
             if($arrData){
-            } */
-            echo json_encode($nomConexion,JSON_UNESCAPED_UNICODE);
-            die();
+                echo json_encode($arrData,JSON_UNESCAPED_UNICODE);
+                die();
+            }
         }
         public function getClasificaciones(string $nomConexion){
             $arrData = $this->model->selectClasificacion($nomConexion);

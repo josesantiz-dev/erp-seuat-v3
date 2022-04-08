@@ -45,6 +45,7 @@
                                                 <th>#</th>
                                                 <th>Nombre</th>
                                                 <th>Plan de Estudios</th>
+                                                <th>Plantel</th>
                                                 <th>Grado</th>
                                                 <th>Tipo</th>
                                                 <th>Clasificación</th>

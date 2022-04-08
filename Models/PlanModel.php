@@ -22,7 +22,7 @@
             $nombrePlan = $data['txtNombreNuevo'];
             $abreviaturaPlan = $data['txtAbreviaturaNuevo'];
             //$estatus = $data['listEstatusNuevo'];
-            $request;
+            $request = [];
             $sqlExist = "SELECT *FROM t_organizacion_planes WHERE nombre_plan = '$nombrePlan' OR abreviatura = '$abreviaturaPlan'";
             $requestExist = $this->select($sqlExist,$nomConexion);
             if($requestExist){
@@ -48,7 +48,7 @@
             $nombrePlan = $data['txtNombreEdit'];
             $abreviaturaPlan = $data['txtAbreviaturaEdit'];
             $estatus = $data['listEstatusEdit'];
-            $request;
+            $request = [];
             $sqlExistNom = "SELECT *FROM t_organizacion_planes WHERE nombre_plan = '$nombrePlan' AND id != $idPlan";
             $requestExistNom = $this->select($sqlExistNom,$nomConexion);
             if($requestExistNom){

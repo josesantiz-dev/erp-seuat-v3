@@ -24,7 +24,7 @@
         }
         public function selectGrados(string $nomConexion){
             $sql = "SELECT *FROM t_grados";
-            $request = $this->select_all($sql,$nomConexion);
+            $request = $this->select_all($sql,$nomConexion); 
             return $request;
         }
         public function selectPlanEstudios(string $nomConexion){
@@ -61,13 +61,13 @@
             $planEstudio = $data['listPlanEstudioNuevo'];
             $clasificacion = $data['listClasificacionNuevo'];
             //$estatus = $data['listEstatusNuevo'];
-            $request;
+            $request = [];
             if ($tipo == '1') {
                 $tipo = "Basica";
             }else{    
                 $tipo = "Ordinaria";
             }
-            $request;
+            $request = [];
             $sqlExist = "SELECT *FROM t_materias WHERE nombre_materia = '$nombreMateria' OR clave = '$clave'";
             $requestExist = $this->select($sqlExist,$nomConexion);
             if($requestExist){
@@ -134,6 +134,12 @@
 				}
 			}
 			return $request;
+        }
+
+        public function selectConexion($nomConexion){
+            $sql = "SELECT *FROM t_db WHERE nombre_conexion = '$nomConexion'";
+            $request = $this->select($sql,'bd_user');
+            return $request['nombre_plantel'];
         }
     }
 ?>    
