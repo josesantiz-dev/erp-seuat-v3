@@ -38,6 +38,17 @@
 
             <div class="card">
               <div class="card-body">
+
+                <label for="listIdPlanteles">Planteles</label>
+                <div class="input-group mb-3">
+                  <select class="form-control custom-select" id="selectPlantel" name="selectPlantel" onchange="fnSelectPlantel(value)">
+                      <option value="" selected>--Selecciona un plantel--</option>
+                      <?php foreach ($data['planteles'] as $key => $value) { ?>
+                          <option value="<?php echo($value['nombre_conexion'])?>"><?php echo($value['nombre_plantel']) ?></option>
+                      <?php } ?>
+                  </select>
+                </div>
+
                 <h3 class="card-title">Listado de grados</h3>
                 <p class="card-text">
                 <table id="tableGrados" class="table table-bordered table-striped table-hover table-sm">

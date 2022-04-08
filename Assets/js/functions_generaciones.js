@@ -2,6 +2,37 @@ let tableGeneraciones;
 let rowTable = "";
 let divLoading = document.querySelector("#divLoading");
 
+/* ---PARA OCULTAR Y VISUALIZAR BOTON MENU AL SELECCIONAR UNA OPCION------ */
+let buscarBotonModal = document.getElementById('botonModal');
+let selectPlantelModal = document.getElementById('selectPlantel');
+buscarBotonModal.style.display = "none";
+
+function fnSelectPlantel(value){
+	if(value !== ''){
+		buscarBotonModal.style.display = 'inline';
+	}else{
+		buscarBotonModal.style.display = 'none';
+	}
+}
+
+// $(function(){
+// 	/*$('.cb').show();*/
+// 	$('#selectPlantel').on('change', function(){
+// 	var value = $(this).val();
+// 	var seats = $("#selectPlantel").val();
+// 	if (value == "") {
+// 	$('.cb').show();
+// 	}else{
+// 	// Ocultamos todos los contenedores de colores
+// 	$('.cb').hide();
+// 	// Mostramos el color elegido
+// 	$('.color_' + value ).show();
+// 	}
+	
+// 	});
+// 	});
+/**------------------------------------------------------- */
+
 
 document.addEventListener('DOMContentLoaded', function(){
 
@@ -44,6 +75,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		let formGeneracion = document.querySelector("#formGeneracion");
 		formGeneracion.onsubmit = function(e){
 			e.preventDefault();
+			let idPlantel = document.querySelector('#selectPlantel').value;
 			let intIdGeneraciones = document.querySelector('#idGeneraciones').value;
 			let strNombre_Generacion = document.querySelector('#txtNombre_Generacion').value;
 			let strFecha_inicio = document.querySelector('#txtFecha_inicio').value;
@@ -69,6 +101,7 @@ document.addEventListener('DOMContentLoaded', function(){
 				
 				if (request.readyState == 4 && request.status == 200) {
 					let objData = JSON.parse(request.responseText);
+					console.log(objData)
 				if (objData.estatus)
 					{
 						$('#ModalFormGeneracion').modal("hide");

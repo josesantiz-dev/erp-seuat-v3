@@ -24,7 +24,7 @@
                     FROM t_grados 
                     WHERE t_grados.estatus !=0
                     ";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql,'bd_tgz');
             return $request;
         }
 
@@ -113,6 +113,13 @@
             }else{
                 $request = 'exist';
             }
+            return $request;
+        }
+
+        //SELECT PLANTELES
+        public function selectPlanteles(string $nomConexion){
+            $sql = "SELECT *FROM t_db";
+            $request = $this->select_all($sql, $nomConexion);
             return $request;
         }
 

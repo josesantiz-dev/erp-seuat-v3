@@ -20,7 +20,7 @@
         public function selectGeneraciones()
         {
             $sql = "SELECT * FROM t_generaciones WHERE estatus !=0";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql,'bd_tgz');
             return $request;
         }
 
@@ -50,12 +50,12 @@
             $this->strFecha_Actualizacion = $Fecha_Actualizacion;
       
             $sql = "SELECT * FROM t_generaciones WHERE nombre_generacion = '$this->strNombre_Generacion' ";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql,'bd_tgz');
       
             if(empty($request)){
               $query_insert = "INSERT INTO t_generaciones(nombre_generacion, fecha_inicio_gen, fecha_fin_gen, estatus, id_usuario_creacion, id_usuario_actualizacion, fecha_creacion, fecha_actualizacion) VALUES(?,?,?,?,?,?,?,?)";
               $arrData = array($this->strNombre_Generacion, $this->strFecha_inicio, $this->strFecha_fin, $this->intEstatus, $this->intId_usuario_creacion, $this->intId_Usuario_Actualizacion, $this->strFecha_Creacion, $this->strFecha_Actualizacion);
-              $request_insert = $this->insert($query_insert,$arrData);
+              $request_insert = $this->insert($query_insert,'bd_tgz',$arrData);
               $return = $request_insert;
             }else{
               $return = "exit";
@@ -109,6 +109,14 @@
           }else{
             $request = 'exist';
           }
+          return $request;
+        }
+
+
+        //SELECT PLANTELES
+        public function selectPlanteles(string $nomConexion){
+          $sql = "SELECT *FROM t_db";
+          $request = $this->select_all($sql, $nomConexion);
           return $request;
         }
 

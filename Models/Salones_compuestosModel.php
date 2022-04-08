@@ -25,7 +25,10 @@
         //EXTRAER SALONES COMPUESTOS O EXTRAER SALONES COMPUESTOS
         public function selectSalonesCompuest()
         {
-            $sql = "SELECT t_salones_compuesto.id AS IdSalonCom, t_salones_compuesto.nombre_salon_compuesto AS NomSalCom, t_periodos.nombre_periodo AS NomPerio, t_grados.nombre_grado AS NomGrad, t_grupos.nombre_grupo AS NomGrup, t_planteles.nombre_plantel AS NomPlant, t_turnos.nombre_turno AS NomTurn, t_salones.nombre_salon AS NomSal, t_salones_compuesto.estatus AS Est
+            $sql = "SELECT t_salones_compuesto.id AS IdSalonCom, t_salones_compuesto.nombre_salon_compuesto AS NomSalCom, 
+                    t_periodos.nombre_periodo AS NomPerio, t_grados.nombre_grado AS NomGrad, t_grupos.nombre_grupo AS NomGrup, 
+                    t_planteles.nombre_plantel AS NomPlant, t_turnos.nombre_turno AS NomTurn, t_salones.nombre_salon AS NomSal, 
+                    t_salones_compuesto.estatus AS Est
                     FROM t_salones_compuesto 
                     INNER JOIN t_periodos AS t_periodos ON t_salones_compuesto.id_periodo = t_periodos.id
                     INNER JOIN t_grados AS t_grados ON t_salones_compuesto.id_grado = t_grados.id
@@ -35,7 +38,7 @@
                     INNER JOIN t_salones AS t_salones ON t_salones_compuesto.id_salon = t_salones.id
                     WHERE t_salones_compuesto.estatus !=0
                     ";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql,'bd_tgz');
             return $request;
         }
 
@@ -137,43 +140,56 @@
         }
 
 
+        //SELECT PLANTELES
+        public function selectPlanteles(string $nomConexion){
+            $sql = "SELECT *FROM t_db";
+            $request = $this->select_all($sql, $nomConexion);
+            return $request;
+        }
 
+
+        /*---------------------------------------SELECT PARA tabla vista----------------------------------------------*/
+        // public function selectPlantelesSCom(){
+        //     $sql = "SELECT * FROM t_planteles WHERE estatus != 0 ORDER BY nombre_plantel ASC ";
+        //     $request = $this->select_all($sql,'bd_tgz');
+        //     return $request;
+        // }
 
 
         /*---------------------------------------SELECT PARA NUEVO----------------------------------------------*/
         public function selectSalonComPerio(){
             $sql = "SELECT * FROM t_periodos WHERE estatus != 0 ORDER BY nombre_periodo ASC ";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql,'bd_tgz');
             return $request;
         }
 
         public function selectSalonComGrado(){
             $sql = "SELECT * FROM t_grados WHERE estatus != 0 ORDER BY nombre_grado ASC ";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql,'bd_tgz');
             return $request;
         }
 
         public function selectSalonComGrupo(){
             $sql = "SELECT * FROM t_grupos WHERE estatus != 0 ORDER BY nombre_grupo ASC ";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql,'bd_tgz');
             return $request;
         }
 
         public function selectSalonComPlant(){
             $sql = "SELECT * FROM t_planteles WHERE estatus != 0 ORDER BY nombre_plantel ASC ";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql,'bd_tgz');
             return $request;
         }
 
         public function selectSalonComHorar(){
             $sql = "SELECT * FROM t_turnos WHERE estatus != 0 ORDER BY nombre_turno ASC ";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql,'bd_tgz');
             return $request;
         }
 
         public function selectSalonComSalon(){
             $sql = "SELECT * FROM t_salones WHERE estatus != 0 ORDER BY nombre_salon ASC ";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql,'bd_tgz');
             return $request;
         }
         /*-------------------------------------------------------------------------------------------------------*/
@@ -183,37 +199,37 @@
 
         public function selectEditSalonComPerio(){
             $sql = "SELECT * FROM t_periodos WHERE estatus != 0 ORDER BY nombre_periodo ASC ";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql,'bd_tgz');
             return $request;
         }
 
         public function selectEditSalonComGrado(){
             $sql = "SELECT * FROM t_grados WHERE estatus != 0 ORDER BY nombre_grado ASC ";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql,'bd_tgz');
             return $request;
         }
 
         public function selectEditSalonComGrupo(){
             $sql = "SELECT * FROM t_grupos WHERE estatus != 0 ORDER BY nombre_grupo ASC ";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql,'bd_tgz');
             return $request;
         }
 
         public function selectEditSalonComPlant(){
             $sql = "SELECT * FROM t_planteles WHERE estatus != 0 ORDER BY nombre_plantel ASC ";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql,'bd_tgz');
             return $request;
         }
 
         public function selectEditSalonComHorar(){
             $sql = "SELECT * FROM t_turnos WHERE estatus != 0 ORDER BY nombre_turno ASC ";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql,'bd_tgz');
             return $request;
         }
 
         public function selectEditSalonComSalon(){
             $sql = "SELECT * FROM t_salones WHERE estatus != 0 ORDER BY nombre_salon ASC ";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql,'bd_tgz');
             return $request;
         }
         /*-------------------------------------------------------------------------------------------------------*/

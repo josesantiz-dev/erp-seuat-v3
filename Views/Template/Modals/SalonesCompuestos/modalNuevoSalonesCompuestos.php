@@ -43,9 +43,9 @@
                     </div>
                     <div class="form-group">
                         <label for="listIdPlantelesNuevo">Plantel</label>
-                        <select class="form-control" id="listIdPlantelesNuevo" name="listIdPlantelesNuevo" onchange="" required >
+                        <!-- <select class="form-control" id="listIdPlantelesNuevo" name="listIdPlantelesNuevo" onchange="" required >
                         
-                        </select>
+                        </select> -->
                     </div>
                     <div class="form-group">
                         <label for="listIdTurnosNuevo">Turno</label>

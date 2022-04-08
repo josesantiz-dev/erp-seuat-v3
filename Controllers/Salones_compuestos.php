@@ -1,5 +1,9 @@
 <?php
     class Salones_compuestos extends Controllers{
+        private $idUser;
+        private $nomConexion;
+        private $rol;
+
         public function __construct()
         {
             parent::__construct();
@@ -9,6 +13,9 @@
                 header('Location: '.base_url().'/login');
                 die();
             }
+            $this->idUser = $_SESSION['idUser'];
+            $this->nomConexion = $_SESSION['nomConexion'];
+            $this->rol = $_SESSION['claveRol'];
         }
 
         public function Salones_compuestos()
@@ -16,6 +23,7 @@
             $data['page_tag'] = "Salones compuestos";
             $data['page_name'] = "Salones compuestos";
             $data['page_title'] = "Salones compuestos";
+            $data['planteles'] = $this->model->selectPlanteles('bd_user');
             $data['page_functions_js'] = "functions_salones_compuestos.js";
             $this->views->getView($this, "salones_compuestos", $data);
         }
@@ -218,7 +226,20 @@
         
 
 
-
+        /*--------------------------selct tabla vista------------------ */
+        // public function getSelectPlantelesSCom(){
+        //     $htmlOptions = "<option value='' selected>- Elige un plantel -</option>";
+        //     $arrData = $this->model->selectPlantelesSCom();
+        //     if(count($arrData) > 0 ){
+        //         for ($i=0; $i < count($arrData); $i++) {
+        //             if($arrData[$i]['estatus'] == 1){
+        //                 $htmlOptions .= '<option value="'.$arrData[$i]['id'].'">'.$arrData[$i]['nombre_plantel'].'</option>';
+        //             }
+        //         }
+        //     }
+        //     echo $htmlOptions;
+        //     die();
+        // }
 
 
 

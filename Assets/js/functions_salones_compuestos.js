@@ -2,6 +2,21 @@ let tableSalonesCompuestos;
 let rowTable = "";
 let divLoading = document.querySelector("#divLoading");
 
+/* ---PARA OCULTAR Y VISUALIZAR BOTON MENU AL SELECCIONAR UNA OPCION------ */
+let buscarBotonModal = document.getElementById('botonModal');
+let selectPlantelModal = document.getElementById('selectPlantel');
+buscarBotonModal.style.display = "none";
+
+
+function fnSelectPlantel(value){
+  if(value !== ''){
+    buscarBotonModal.style.display = 'inline';
+  }else{
+    buscarBotonModal.style.display = 'none';
+  }
+}
+/* -------------------------------------------------------------------- */
+
 //SELECT PARA NUEVO
 window.addEventListener('load', function(){
     fntSelectSalonComPerio();
@@ -10,6 +25,7 @@ window.addEventListener('load', function(){
     fntSelectSalonComPlantel();
     fntSelectSalonComTurno();
     fntSelectSalonComSalon();
+    // fntSelectPlantelesSCom();
 }, false);
 
 //SELECT PARA EDITAR
@@ -270,14 +286,24 @@ function fntDelSalonesComp(id){
 }
 
 
-
-
+/*--------------------------selct tabla vista------------------ */
+// function fntSelectPlantelesSCom(){
+//     if(document.querySelector('#listIdPlanteles')){
+//         let ajaxUrl = base_url+'/Salones_compuestos/getSelectPlantelesSCom';
+//         let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+//         request.open("GET",ajaxUrl,true);
+//         request.send();
+//         request.onreadystatechange = function() {
+//             if(request.readyState == 4 && request.status == 200) {
+//                 document.querySelector('#listIdPlanteles').innerHTML = request.responseText;
+//             }
+//         }
+//     }
+// }
 
 /* -----------------------------SELECT PARA NUEVO---------------------------------------------- */
 function fntSelectSalonComPerio(){
     if(document.querySelector('#listIdPeriodosNuevo')){
-        /* let nombreGeneracion = document.querySelector('#listIdGeneracionesNuevo').options[document.querySelector('#listIdGeneracionesNuevo').selectedIndex].text; */
-
         let ajaxUrl = base_url+'/Salones_compuestos/getSelectSalonComPerio';
         let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
         request.open("GET",ajaxUrl,true);
@@ -292,8 +318,6 @@ function fntSelectSalonComPerio(){
 
 function fntSelectSalonComGrado(){
     if(document.querySelector('#listIdGradosNuevo')){
-        /* let nombreGeneracion = document.querySelector('#listIdGeneracionesNuevo').options[document.querySelector('#listIdGeneracionesNuevo').selectedIndex].text; */
-
         let ajaxUrl = base_url+'/Salones_compuestos/getSelectSalonComGrado';
         let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
         request.open("GET",ajaxUrl,true);
@@ -308,8 +332,6 @@ function fntSelectSalonComGrado(){
 
 function fntSelectSalonComGrupo(){
     if(document.querySelector('#listIdGruposNuevo')){
-        /* let nombreGeneracion = document.querySelector('#listIdGeneracionesNuevo').options[document.querySelector('#listIdGeneracionesNuevo').selectedIndex].text; */
-
         let ajaxUrl = base_url+'/Salones_compuestos/getSelectSalonComGrupo';
         let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
         request.open("GET",ajaxUrl,true);
