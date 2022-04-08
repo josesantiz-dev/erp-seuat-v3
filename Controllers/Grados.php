@@ -1,5 +1,9 @@
 <?php
     class Grados extends Controllers{
+        private $idUser;
+        private $nomConexion;
+        private $rol;
+
         public function __construct()
         {
             parent::__construct();
@@ -9,6 +13,9 @@
                 header('Location: '.base_url().'/login');
                 die();
             }
+            $this->idUser = $_SESSION['idUser'];
+            $this->nomConexion = $_SESSION['nomConexion'];
+            $this->rol = $_SESSION['claveRol'];
         }
 
         public function Grados()
@@ -16,6 +23,7 @@
             $data['page_tag'] = "Grados";
             $data['page_name'] = "Grados";
             $data['page_title'] = "Grados";
+            $data['planteles'] = $this->model->selectPlanteles('bd_user');
             $data['page_functions_js'] = "functions_grados.js";
             $this->views->getView($this, "grados", $data);
         }

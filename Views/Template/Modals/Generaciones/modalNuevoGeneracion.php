@@ -19,6 +19,21 @@
                 <input type="hidden" id="txtFecha_Actualizacion" name="txtFecha_Actualizacion" value="0000-00-00 00:00:00">
 
                 <div class="card-body">
+                  <!-- <div class="form-group">
+                    <label for="listIdPlantelesNuevo">Planteles</label>
+                    <select class="form-control" id="listIdPlantelesNuevo" name="listIdPlantelesNuevo" onchange="" required >
+                        
+                    </select>
+                  </div> -->
+                  <label for="listIdPlanteles">Planteles</label>
+                  <div class="input-group mb-3">
+                    <select class="form-control custom-select" id="selectPlantel" name="selectPlantel" required>
+                      <option value="" selected>--Selecciona un plantel--</option>
+                        <?php foreach ($data['planteles'] as $key => $value) { ?>
+                          <option value="<?php echo($value['nombre_conexion'])?>"><?php echo($value['nombre_plantel']) ?></option>
+                        <?php } ?>
+                    </select>
+                  </div>
                   <div class="form-group">
                     <label for="txtNombre_Generacion">Nombre</label>
                     <input type="text" id="txtNombre_Generacion" name="txtNombre_Generacion" class="form-control" placeholder="&#xf007 Nombre de la generación"  name="Ingresa el nombre"  required>

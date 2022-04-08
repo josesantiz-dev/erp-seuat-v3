@@ -29,7 +29,7 @@
                     WHERE t_periodos.estatus !=0
                     /* SELECT * FROM t_ciclos WHERE estatus !=0 */
                     ";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql,'bd_tgz');
             return $request;
         }
 
@@ -130,14 +130,14 @@
         //SELECT PERIODOS ORGANIZACION
         public function selectPeriodoOrg(){
             $sql = "SELECT * FROM t_organizacion_planes WHERE estatus != 0 ORDER BY nombre_plan ASC ";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql,'bd_tgz');
             return $request;
         }
 
         //SELECT PERIODOS CICLOS
         public function selectPeriodoCiclos(){
             $sql = "SELECT * FROM t_ciclos WHERE estatus != 0 ORDER BY nombre_ciclo ASC ";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql,'bd_tgz');
             return $request;
         }
         /* ------------------------------------------------------------------------------------------- */

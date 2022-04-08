@@ -2,6 +2,21 @@ let tableCiclos;
 let rowTable = "";
 let divLoading = document.querySelector("#divLoading");
 
+/* ---PARA OCULTAR Y VISUALIZAR BOTON MENU AL SELECCIONAR UNA OPCION------ */
+let buscarBotonModal = document.getElementById('botonModal');
+let selectPlantelModal = document.getElementById('selectPlantel');
+buscarBotonModal.style.display = "none";
+
+function fnSelectPlantel(value){
+    if(value !== ''){
+        buscarBotonModal.style.display = 'inline';
+    }else{
+        buscarBotonModal.style.display = 'none';
+    }
+}
+/* -------------------------------------------------------------------- */
+
+
 //PARA SELECT
 window.addEventListener('load', function(){
     fntSelectCiclo();

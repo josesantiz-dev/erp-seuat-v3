@@ -26,7 +26,7 @@
                     WHERE t_ciclos.estatus !=0
                     /* SELECT * FROM t_ciclos WHERE estatus !=0 */
                     ";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql,'bd_tgz');
             return $request;
         }
 
@@ -56,12 +56,12 @@
             $this->intId_Generacion = $Id_Generacion;
 
             $sql = "SELECT * FROM t_ciclos WHERE nombre_ciclo = '$this->strNombre_Ciclo' ";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql,'bd_tgz');
 
             if(empty($request)){
                 $query_insert = "INSERT INTO t_ciclos(nombre_ciclo, anio, estatus, fecha_creacion, fecha_actualizacion, id_usuario_creacion, id_usuario_actualizacion, id_generacion) VALUES(?,?,?,?,?,?,?,?)";
                 $arrData = array($this->strNombre_Ciclo, $this->strAnio, $this->intEstatus, $this->strFecha_Creacion, $this->strFecha_Actualizacion, $this->intId_usuario_creacion, $this->intId_Usuario_Actualizacion, $this->intId_Generacion);
-                $request_insert = $this->insert($query_insert,$arrData);
+                $request_insert = $this->insert($query_insert,'bd_tgz',$arrData);
                 $return = $request_insert;
             }else{
                 $return = "exist";
@@ -121,7 +121,7 @@
         //SELECT
         public function selectCiclo(){
             $sql = "SELECT * FROM t_generaciones WHERE estatus != 0 ORDER BY nombre_generacion ASC ";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql,'bd_tgz');
             return $request;
         }
         
@@ -133,10 +133,12 @@
             return $request;
         }
 
+        //SELECT PLANTELES
+        public function selectPlanteles(string $nomConexion){
+            $sql = "SELECT *FROM t_db";
+            $request = $this->select_all($sql, $nomConexion);
+            return $request;
+        }
 
-        //MODELO PARA ACTUALIZAR
-
-
-        //PARA ELIMINAR
     }
 ?>

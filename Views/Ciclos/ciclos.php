@@ -19,7 +19,7 @@
           </div>
           <div class="col-sm-5">
             <ol class="breadcrumb float-sm-right btn-block">
-            <button type="button" onclick="openModal();" class="btn btn-inline btn-primary btn-sm btn-block"><i class="fa fa-plus-circle fa-md"></i> Nuevo</button>
+            <button type="button" onclick="openModal();" name="botonModal" id="botonModal" class="btn btn-inline btn-primary btn-sm btn-block"><i class="fa fa-plus-circle fa-md"></i> Nuevo</button>
             <!--<button type="button" onclick="openModal();" class="btn btn-inline btn-primary btn-sm btn-block" data-toggle="modal" data-target="#ModalFormRol"><i class="fa fa-plus-circle fa-md"></i> Nuevo</button>-->
               <!--<li class="breadcrumb-item"><i class="fa fa-home fa-md"></i><a href="#">Home</a></li>
               <li class="breadcrumb-item active"><a href="<?= base_url(); ?>/roles"><?= $data['page_title'] ?></a></li>-->
@@ -38,6 +38,17 @@
 
             <div class="card">
               <div class="card-body">
+
+                <label for="listIdPlanteles">Planteles</label>
+                <div class="input-group mb-3">
+                  <select class="form-control custom-select" id="selectPlantel" name="selectPlantel" onchange="fnSelectPlantel(value)">
+                      <option value="" selected>--Selecciona un plantel--</option>
+                      <?php foreach ($data['planteles'] as $key => $value) { ?>
+                          <option value="<?php echo($value['nombre_conexion'])?>"><?php echo($value['nombre_plantel']) ?></option>
+                      <?php } ?>
+                  </select>
+                </div>
+
                 <h3 class="card-title">Listado de ciclos</h3>
                 <p class="card-text">
                 <table id="tableCiclos" class="table table-bordered table-striped table-hover table-sm">
