@@ -3,7 +3,6 @@ var idPersonaSeleccionada;
 var formInscripcionNueva = document.querySelector("#formInscripcionNueva");
 var formTutorNuevo = document.querySelector("#formAgregarTutor");
 let divCambiarSubcampania = document.querySelector('.cambiarsubcampania');
-
 document.getElementById("btnAnterior").style.display = "none";
 document.getElementById("btnAnteriorEdit").style.display = "none";
 document.getElementById("btnSiguiente").style.display = "none";
@@ -15,10 +14,12 @@ var tabActual = 0;
 var tabActualEdit = 0;
 mostrarTab(tabActual);
 mostrarTabEdit(tabActualEdit);
+let nomConexionSeleccionada = "";
 
 divCambiarSubcampania.style.display = "none";
 
 document.addEventListener('DOMContentLoaded', function(){
+    nomConexionSeleccionada = document.querySelector('#listPlantelDatatable').value;
 	fnPlantelSeleccionadoDatatable(document.querySelector('#listPlantelDatatable').value);
 });
 function buscarPersona(){
@@ -32,7 +33,7 @@ function buscarPersona(){
             "url": " "+base_url+"/Assets/plugins/Spanish.json"
         },
         "ajax":{
-            "url": " "+base_url+"/Inscripcion/buscarPersonaModal?val="+textoBusqueda,
+            "url": " "+base_url+"/Inscripcion/buscarPersonaModal?val="+textoBusqueda+'&con='+nomConexionSeleccionada,
             "dataSrc":""
         },
         "columns":[
@@ -376,7 +377,17 @@ function pasarTab(n) {
     }
 }
 function fnPlantelSeleccionadoDatatable(value){
-    var idPlantel = value;
+    nomConexionSeleccionada = value;
+    if(value == 'all'){
+        document.getElementById('btnNuevaInscripcion').style.display = "none";
+    }else{
+        document.getElementById('btnNuevaInscripcion').style.display = "inline";
+    }
+    /* let url = base_url+"/Inscripcion/getInscripcionesAdmision?conexion="+value;
+    fetch(url).then((res => res.json())).then(resultado =>{
+        console.log(resultado);
+    }).catch(err =>{throw err}); */
+    var nomConexion = value;
     var nombrePlantel = document.querySelector('#listPlantelDatatable');
     var text= nombrePlantel.options[nombrePlantel.selectedIndex].text;
     document.querySelector('#nombrePlantelDatatable').innerHTML = text;
@@ -387,7 +398,7 @@ function fnPlantelSeleccionadoDatatable(value){
         	"url": " "+base_url+"/Assets/plugins/Spanish.json"
         },
         "ajax":{
-            "url": " "+base_url+"/Inscripcion/getInscripcionesAdmision?idplantel="+idPlantel,
+            "url": " "+base_url+"/Inscripcion/getInscripcionesAdmision?conexion="+nomConexion,
             "dataSrc":""
         },
         "columns":[

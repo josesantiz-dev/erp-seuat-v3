@@ -111,8 +111,8 @@
                                             <label>Plantel de interés</label>
                                             <select class="form-control form-control-sm" id="listPlantelInteres" name="listPlantelInteres">
                                                 <option value="">Seleccionar</option>
-                                                <?php  foreach ($data['planteles'] as $key => $plantel) { ?>
-                                                    <option value="<?php echo $plantel['id'] ?>"><?php echo($plantel['nombre_plantel'].'('.$plantel['municipio'].')') ?></option>
+                                                <?php  foreach ($data['superplanteles'] as $key => $plantel) { ?>
+                                                    <option value="<?php echo $plantel['nombre_conexion'] ?>"><?php echo($plantel['nombre_plantel']) ?></option>
                                                 <?php }?>
                                             </select>
                                         </div>

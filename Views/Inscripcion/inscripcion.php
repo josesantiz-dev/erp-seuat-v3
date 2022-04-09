@@ -15,9 +15,26 @@
                     <div class="col-sm-7">
                         <h1 class="m-0"><?= $data['page_title'] ?></h1>
                     </div>
-                    <div class="col-sm-5">
+                    <div class="col-lg-6 col-md-6">
+                    <?php if($data['claveRol'] == 'admin' || $data['claveRol'] == 'superadmin'){ ?>
+                        <label>Selecciona una base de datos para poder inscribir</label>
+                        <select class="custom-select" id="listPlantelDatatable" onchange="fnPlantelSeleccionadoDatatable(value)">
+                            <option value="all" selected="">Todos</option>
+                            <?php foreach ($data['superplanteles'] as $key => $plantel) { ?>
+                                <option value="<?php echo($plantel['nombre_conexion']) ?>"><?php echo($plantel['nombre_plantel']) ?></option>
+                            <?php }?>
+                        </select>
+                        <?php } else { ?>
+                        <select class="custom-select" id="listPlantelDatatable" onchange="fnPlantelSeleccionadoDatatable(value)" style="display: none;">
+                            <?php foreach ($data['superplanteles'] as $key => $plantel) { if($plantel['nombre_conexion'] == $data['nomConexion']){?>
+                            <option value="<?php echo($plantel['nombre_conexion']) ?>" selected><?php echo($plantel['nombre_plantel']) ?></option>
+                            <?php } }?>
+                        </select>
+                        <?php }?>
+                    </div>
+                    <div class="col-sm-5 d-flex align-items-end">
                         <ol class="breadcrumb float-sm-right btn-block">
-                            <button type="button" class="btn btn-inline btn-primary btn-sm btn-block" data-toggle="modal" data-target="#ModalFormNuevaInscripcion"><i class="fa fa-plus-circle fa-md"></i>Nuevo</button>
+                            <button type="button" id="btnNuevaInscripcion" class="btn btn-inline btn-primary btn-sm btn-block" data-toggle="modal" data-target="#ModalFormNuevaInscripcion"><i class="fa fa-plus-circle fa-md"></i>Nuevo</button>
                         </ol>
                     </div>
                 </div>
@@ -26,25 +43,6 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="col-md-6">
-                                    <label>Selecciona un plantel</label>
-                                    <select class="custom-select" id="listPlantelDatatable" onchange="fnPlantelSeleccionadoDatatable(value)">
-                                        <option selected>Todos</option>
-                                        <?php 
-                                            foreach ($data['planteles'] as $key => $value) {
-                                                ?>
-                                                    <option value="<?php echo $value['id']?>"><?php echo $value['nombre_plantel'].' ('.$value['municipio'].')'?></option>
-                                                <?php
-                                            }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-body">

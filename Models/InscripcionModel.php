@@ -3,6 +3,13 @@
         public function __construct(){
             parent::__construct();
         }
+
+         //Funcion para consultar lista de Super Planteles
+         public function selectSuperPlanteles(string $nombreConexion){
+            $sql = "SELECT *FROM t_db";
+            $request = $this->select_all($sql,$nombreConexion);
+            return $request;
+        }
         /* public function selectInscripcionesAdmision(){
             $sql = "SELECT ins.id,CONCAT(nombre_persona,' ',ap_paterno,' ',ap_materno) AS nombre_completo,plant.nombre_plantel,plant.municipio,plan.nombre_carrera,sal.nombre_salon,gra.numero_natural,grup.nombre_grupo,per.validacion FROM t_inscripciones AS ins
             INNER JOIN t_personas AS per ON ins.id_personas = per.id
@@ -14,39 +21,10 @@
             $request = $this->select_all($sql);
             return $request;
         } */
-        public function selectInscripcionesAdmision($idplantel){
-            $idPlantel = $idplantel;
-            if($idPlantel == "Todos"){
-                $sql = "SELECT plan.id,plan.nombre_carrera,niv.nombre_nivel_educativo,ins.grado,grup.nombre_grupo,orgp.nombre_plan,tur.id AS id_turno,
-                tur.nombre_turno, COUNT(*) AS total FROM t_inscripciones AS ins
-                                INNER JOIN t_personas AS per ON ins.id_personas = per.id
-                                INNER JOIN t_plan_estudios AS plan ON ins.id_plan_estudios = plan.id
-                                INNER JOIN t_nivel_educativos AS niv ON plan.id_nivel_educativo = niv.id
-                                INNER JOIN t_organizacion_planes AS orgp ON plan.id_plan = orgp.id
-                                LEFT JOIN t_salones_compuesto AS sal ON ins.id_salon_compuesto = sal.id
-                                LEFT JOIN t_grados AS gra ON sal.id_grado = gra.id
-                                LEFT JOIN t_grupos AS grup ON sal.id_grupo = grup.id
-                                INNER JOIN t_planteles AS plant ON plan.id_plantel = plant.id
-                                INNER JOIN t_turnos AS tur ON ins.id_horario = tur.id
-                                INNER JOIN t_historiales AS h ON ins.id_historial = h.id
-                                WHERE h.inscrito = 1
-                                GROUP BY plan.nombre_carrera,ins.grado,tur.nombre_turno HAVING COUNT(*)>=1";
-                $request = $this->select_all($sql);
-            }else{
-                $sql = "SELECT plan.id,plan.nombre_carrera,niv.nombre_nivel_educativo,ins.grado,grup.nombre_grupo,orgp.nombre_plan,tur.id AS id_turno,tur.nombre_turno, COUNT(*) AS total FROM t_inscripciones AS ins
-                INNER JOIN t_personas AS per ON ins.id_personas = per.id
-                INNER JOIN t_plan_estudios AS plan ON ins.id_plan_estudios = plan.id
-                INNER JOIN t_nivel_educativos AS niv ON plan.id_nivel_educativo = niv.id
-                INNER JOIN t_organizacion_planes AS orgp ON plan.id_plan = orgp.id
-                LEFT JOIN t_salones_compuesto AS sal ON ins.id_salon_compuesto = sal.id
-                LEFT JOIN t_grados AS gra ON sal.id_grado = gra.id
-                LEFT JOIN t_grupos AS grup ON sal.id_grupo = grup.id
-                INNER JOIN t_planteles AS plant ON plan.id_plantel = plant.id
-                INNER JOIN t_turnos AS tur ON ins.id_horario = tur.id
-                WHERE plant.id = $idPlantel
-                GROUP BY plan.nombre_carrera,ins.grado,tur.nombre_turno HAVING COUNT(*)>=1";
-                $request = $this->select_all($sql);
-            }
+        public function selectInscripcionesAdmision(string $nomConexion){
+            $sql = "SELECT plan.id,plan.nombre_carrera,niv.nombre_nivel_educativo,ins.grado,grup.nombre_grupo,orgp.nombre_plan,tur.id AS id_turno,
+                tur.nombre_turno, COUNT(*) AS total FROM t_inscripciones AS ins INNER JOIN t_personas AS per ON ins.id_personas = per.id INNER JOIN t_plan_estudios AS plan ON ins.id_plan_estudios = plan.id INNER JOIN t_nivel_educativos AS niv ON plan.id_nivel_educativo = niv.id INNER JOIN t_organizacion_planes AS orgp ON plan.id_plan = orgp.id LEFT JOIN t_salones_compuesto AS sal ON ins.id_salon_compuesto = sal.id LEFT JOIN t_grados AS gra ON sal.id_grado = gra.id LEFT JOIN t_grupos AS grup ON sal.id_grupo = grup.id INNER JOIN t_planteles AS plant ON plan.id_plantel = plant.id INNER JOIN t_turnos AS tur ON ins.id_horario = tur.id INNER JOIN t_historiales AS h ON ins.id_historial = h.id WHERE h.inscrito = 1 GROUP BY plan.nombre_carrera,ins.grado,tur.nombre_turno HAVING COUNT(*)>=1";
+                $request = $this->select_all($sql, $nomConexion);
             return $request;
         }
         public function selectInscripcionesControlEscolar($idplantel){
@@ -89,13 +67,13 @@
             $request = $this->select($sql);
             return $request;
         }
-        public function selectPersonasModal($data){
+        public function selectPersonasModal($data, string $nomConexion){
             $sql = "SELECT per.id,CONCAT(per.nombre_persona,' ',per.ap_paterno,' ',per.ap_materno) AS nombre,
             ins.id AS id_inscripcion FROM t_personas AS per
             LEFT JOIN t_inscripciones AS ins ON ins.id_personas = per.id
             LEFT JOIN t_historiales AS his ON ins.id_historial = his.id
             WHERE CONCAT(per.nombre_persona,' ',per.ap_paterno,' ',per.ap_materno) LIKE '%$data%'";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql, $nomConexion);
             return $request;
         }
 
@@ -154,9 +132,9 @@
             }
             return $request_inscripcion;
         }
-        public function selectPlanteles(){
+        public function selectPlanteles(string $nomConexion){
             $sql = "SELECT *FROM t_planteles WHERE estatus = 1";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql, $nomConexion);
             return $request;
         }
 
@@ -166,17 +144,17 @@
             $request = $this->select_all($sql);
             return $request;
         }
-        public function selectGrados(){
+        public function selectGrados(string $nomConexion){
             $sql = "SELECT *FROM t_grados";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql, $nomConexion);
             return $request;
         }
-        public function selectSubcampanias(){
+        public function selectSubcampanias(string $nomConexion){
             $sql = "SELECT c.id AS id_campania,c.nombre_campania,c.fecha_fin AS fecha_fin_campania,s.id AS id_subcampania,s.nombre_sub_campania,s.fecha_fin AS fecha_fin_subcampania FROM t_campanias AS c
             RIGHT JOIN t_subcampania AS s ON s.id_campania = c.id
             WHERE c.fecha_fin >= NOW()
             ORDER BY c.fecha_fin DESC";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql, $nomConexion);
             return $request;
         }
         public function selectPlanes(){
@@ -184,9 +162,9 @@
             $request = $this->select_all($sql);
             return $request;
         }
-        public function selectturnos(){
+        public function selectturnos(string $nomConexion){
             $sql = "SELECT *FROM t_turnos WHERE id_categoria_persona = 2";
-            $request = $this->select_all($sql);
+            $request = $this->select_all($sql, $nomConexion);
             return $request;
         }
         public function selectDocumentacion($idAlumno){

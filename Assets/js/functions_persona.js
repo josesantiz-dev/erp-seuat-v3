@@ -70,7 +70,7 @@ formPersonaNueva.onsubmit = function(e){
                 tablePersonas.api().ajax.reload();
             }else{
                 swal.fire("Error",objData.msg,"error");
-            }
+            }   
         }
     }
 }
